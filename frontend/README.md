@@ -27,7 +27,7 @@ The frontend is built with **React** and **Vite**, delivering a fast, responsive
 
 * 📊 Administrative dashboard for monitoring and analytics
 
-* 🤖 AI-assisted healthcare support powered by GreenPT
+* 🤖 AI-assisted healthcare support powered by Gemini
 
 * 📱 Responsive interface optimized for multiple screen sizes
 
