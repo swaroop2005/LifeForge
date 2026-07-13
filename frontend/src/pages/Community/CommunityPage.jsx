@@ -82,7 +82,7 @@ export default function CommunityPage() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-ink/85 backdrop-blur border-b border-white/10">
         <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
           <button onClick={() => nav('/')} className="flex items-center gap-2.5">
-            <span className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center text-white text-sm font-bold">V</span>
+            <span className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center text-white text-sm font-bold">L</span>
             <span className="font-bold text-zinc-100">LifeForge</span>
           </button>
           <div className="flex items-center gap-3">

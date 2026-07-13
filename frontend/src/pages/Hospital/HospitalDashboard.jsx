@@ -92,7 +92,7 @@ export default function HospitalDashboard() {
                   <div>
                     <div className="flex items-center gap-2 mb-1">
                       <BloodTypeTag type={r.blood_type} />
-                      <span className="text-sm font-semibold text-zinc-200">{r.units} units</span>
+                      <span className="text-sm font-semibold text-zinc-200">{r.quantity} unit{r.quantity > 1 ? "s" : ""}</span>
                       <StatusBadge status={r.status} />
                     </div>
                     <p className="text-xs text-zinc-500 capitalize">{r.urgency} · {r.notes}</p>

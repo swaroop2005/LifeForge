@@ -44,7 +44,7 @@ export default function AdminLogin() {
       <div className="w-full max-w-md">
         <div className="bg-panel rounded-3xl shadow-2xl p-8">
           <div className="text-center mb-8">
-            <div className="w-14 h-14 bg-red-600 rounded-2xl flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">V</div>
+            <div className="w-14 h-14 bg-red-600 rounded-2xl flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">L</div>
             <h1 className="text-2xl font-bold text-zinc-100">Admin Portal</h1>
             <p className="text-zinc-500 text-sm mt-1">LifeForge — Restricted Access</p>
           </div>

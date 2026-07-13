@@ -213,7 +213,7 @@ export default function DonorDashboard() {
 
           {/* Empathetic quote */}
           {impact?.total_donations > 0 && (
-            <div className="bg-gradient-to-r from-red-50 to-rose-50 border border-red-500/20 rounded-2xl px-6 py-5 mb-6">
+            <div className="glass border border-red-500/20 rounded-2xl px-6 py-5 mb-6">
               <p className="text-sm text-zinc-400 font-semibold mb-1 uppercase tracking-wide">Your impact</p>
               <p className="text-zinc-300 text-sm leading-relaxed italic">"{quote}"</p>
             </div>

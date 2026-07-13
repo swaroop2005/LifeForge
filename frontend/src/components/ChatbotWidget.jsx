@@ -128,7 +128,7 @@ export default function ChatbotWidget() {
 
             {loading && (
               <div className="flex justify-start">
-                <div className="w-7 h-7 bg-red-500/15 rounded-xl flex items-center justify-center text-xs font-bold text-red-400 mr-2 shrink-0">V</div>
+                <div className="w-7 h-7 bg-red-500/15 rounded-xl flex items-center justify-center text-xs font-bold text-red-400 mr-2 shrink-0">L</div>
                 <div className="bg-panel border border-white/10 px-4 py-3 rounded-2xl rounded-bl-sm shadow-sm flex items-center gap-1.5">
                   <div className="w-1.5 h-1.5 bg-red-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
                   <div className="w-1.5 h-1.5 bg-red-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
