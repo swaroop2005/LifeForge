@@ -11,61 +11,59 @@ router = APIRouter(prefix="/admin", tags=["admin"])
 
 @router.get("/dashboard")
 def dashboard(db: Session = Depends(get_db), _=Depends(require_role("admin"))):
-    total_stock = db.query(BloodStock.units).all()
+    from app.services.chatbot import _get_df
+    df = _get_df()
     users_by_role = dict(
         db.query(User.role, func.count(User.id)).group_by(User.role).all()
     )
+    # lowest-stock hospitals from live eRaktKosh data (whole blood / PRBC records)
+    low = df[df["availability"] <= 2].head(8)
+    low_alerts = [
+        {"bank_name": r["hospital_name"][:48], "blood_type": r["blood_group"], "units": int(r["availability"])}
+        for _, r in low.iterrows()
+    ]
     return {
         "total_users": db.query(User).count(),
         "total_donors": db.query(Donor).count(),
         "total_patients": db.query(Patient).count(),
         "total_hospitals": db.query(Hospital).count(),
         "total_banks": db.query(BloodBank).count(),
-        "total_stock_units": sum(s[0] for s in total_stock),
+        "total_stock_units": int(df["availability"].sum()),
         "pending_requests": db.query(BloodRequest).filter(BloodRequest.status == "pending").count(),
         "fulfilled_requests": db.query(BloodRequest).filter(BloodRequest.status == "fulfilled").count(),
         "total_requests": db.query(BloodRequest).count(),
         "total_donations": db.query(Donation).count(),
         "active_journeys": db.query(BloodJourney).filter(BloodJourney.chat_accepted == True).count(),
         "users_by_role": users_by_role,
-        "low_stock_alerts": [
-            {"bank_name": bank.name, "blood_type": s.blood_type, "units": s.units}
-            for s, bank in db.query(BloodStock, BloodBank)
-                .join(BloodBank, BloodStock.bank_id == BloodBank.id)
-                .filter(BloodStock.units < 10).limit(20).all()
-        ],
+        "low_stock_alerts": low_alerts,
     }
 
 @router.get("/heatmap")
 def heatmap(db: Session = Depends(get_db), _=Depends(require_role("admin"))):
-    banks = db.query(BloodBank).all()
-    # Group by state for a clean heatmap (4114 overlapping pins → 35 state bubbles)
-    by_state = defaultdict(lambda: {"banks": 0, "total_units": 0, "risk_sum": 0.0})
-    prediction_scores = {r.region: r.shortage_risk for r in db.query(PredictionScore).all()}
-
-    for bank in banks:
-        state = bank.state or "Unknown"
-        stock = db.query(BloodStock).filter(BloodStock.bank_id == bank.id).all()
-        total = sum(s.units for s in stock)
-        risk = prediction_scores.get(bank.city, max(0.0, min(1.0, 1 - (total / 200))))
-        by_state[state]["banks"] += 1
-        by_state[state]["total_units"] += total
-        by_state[state]["risk_sum"] += risk
+    # Aggregate real eRaktKosh stock per state (47k records → 35 state bubbles).
+    # Risk scales with average units per stock record; ~25 units/record is healthy.
+    from app.services.chatbot import _get_df
+    df = _get_df()
+    grouped = df.groupby("state").agg(
+        total_units=("availability", "sum"),
+        records=("availability", "count"),
+        banks=("hospital_code", "nunique"),
+    )
 
     result = []
-    for state, data in by_state.items():
+    for state, row in grouped.iterrows():
         lat, lng = STATE_CENTROIDS.get(state, (20.5937, 78.9629))
-        n = data["banks"]
-        avg_risk = round(data["risk_sum"] / n, 2) if n else 0.0
+        avg_per_record = row["total_units"] / row["records"] if row["records"] else 0
+        risk = round(max(0.05, min(0.95, 1 - (avg_per_record / 25))), 2)
         result.append({
             "bank_id": state,
-            "name": f"{state} ({n} hospitals)",
+            "name": f"{state} ({int(row['banks'])} hospitals)",
             "city": state,
             "lat": lat,
             "lng": lng,
-            "shortage_risk": avg_risk,
-            "total_units": data["total_units"],
-            "bank_count": n,
+            "shortage_risk": risk,
+            "total_units": int(row["total_units"]),
+            "bank_count": int(row["banks"]),
         })
     return sorted(result, key=lambda x: x["shortage_risk"], reverse=True)
 
