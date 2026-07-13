@@ -113,7 +113,7 @@ export default function Layout({ role, activeTab, setTab, children, badge }) {
         <div className="px-4 py-4 border-t border-gray-100">
           <div className="flex items-center gap-2 text-xs text-green-600 bg-green-50 rounded-xl px-3 py-2 mb-3">
             <Leaf size={13} />
-            <span className="font-medium">GreenPT AI Active</span>
+            <span className="font-medium">LifeForge AI Active</span>
           </div>
           <button onClick={logout}
             className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors">

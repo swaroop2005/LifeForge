@@ -5,7 +5,7 @@ import hashlib
 from openai import OpenAI
 from app.config import settings
 
-client = OpenAI(base_url=settings.greenpt_base_url, api_key=settings.greenpt_api_key)
+client = OpenAI(base_url=settings.ai_base_url, api_key=settings.gemini_api_key or "missing-key")
 
 _kb_chunks = []
 _kb_embeddings = None
@@ -28,17 +28,18 @@ def _load_knowledge_base():
 
     current_hash = _kb_hash()
 
-    # use cached embeddings if KB hasn't changed
+    # use cached embeddings if KB and embedding model haven't changed
     if os.path.exists(_CACHE_PATH) and os.path.exists(_META_PATH):
         with open(_META_PATH) as f:
             meta = json.load(f)
-        if meta.get("hash") == current_hash and meta.get("count") == len(_kb_chunks):
+        if (meta.get("hash") == current_hash and meta.get("count") == len(_kb_chunks)
+                and meta.get("model") == settings.ai_embed_model):
             data = np.load(_CACHE_PATH)
             _kb_embeddings = data["embeddings"]
-            print(f"[GreenPT] Loaded {len(_kb_chunks)} chunks from embedding cache.")
+            print(f"[LifeForge AI] Loaded {len(_kb_chunks)} chunks from embedding cache.")
             return
 
-    print(f"[GreenPT] Embedding {len(_kb_chunks)} KB chunks via green-embedding...")
+    print(f"[LifeForge AI] Embedding {len(_kb_chunks)} KB chunks via {settings.ai_embed_model}...")
     texts = [c["text"] for c in _kb_chunks]
 
     # embed in batches of 32 to avoid payload limits
@@ -46,7 +47,7 @@ def _load_knowledge_base():
     batch_size = 32
     for i in range(0, len(texts), batch_size):
         batch = texts[i:i + batch_size]
-        resp = client.embeddings.create(model="green-embedding", input=batch)
+        resp = client.embeddings.create(model=settings.ai_embed_model, input=batch)
         all_embeddings.extend([e.embedding for e in resp.data])
 
     _kb_embeddings = np.array(all_embeddings)
@@ -54,13 +55,13 @@ def _load_knowledge_base():
     # persist to disk
     np.savez_compressed(_CACHE_PATH, embeddings=_kb_embeddings)
     with open(_META_PATH, "w") as f:
-        json.dump({"hash": current_hash, "count": len(_kb_chunks), "model": "green-embedding"}, f)
+        json.dump({"hash": current_hash, "count": len(_kb_chunks), "model": settings.ai_embed_model}, f)
 
-    print(f"[GreenPT] Embeddings cached ({_kb_embeddings.shape}).")
+    print(f"[LifeForge AI] Embeddings cached ({_kb_embeddings.shape}).")
 
 
 def embed_query(text: str) -> np.ndarray:
-    resp = client.embeddings.create(model="green-embedding", input=[text])
+    resp = client.embeddings.create(model=settings.ai_embed_model, input=[text])
     return np.array(resp.data[0].embedding)
 
 
@@ -96,22 +97,12 @@ def retrieve_chunks(query: str, top_k: int = 20, disease_filter: str = None) -> 
 
 
 def rerank_chunks(query: str, chunks: list, top_k: int = 5) -> list:
-    docs = [c["text"] for c in chunks]
-    resp = client.rerank(model="green-rerank", query=query, documents=docs, top_n=top_k)
-    return [
-        {
-            "text": docs[r.index],
-            "score": r.relevance_score,
-            "disease": chunks[r.index].get("disease"),
-            "topic": chunks[r.index].get("topic"),
-            "nutrient": chunks[r.index].get("nutrient"),
-            "source": chunks[r.index].get("source", "LifeForge"),
-        }
-        for r in resp.results
-    ]
+    # chunks arrive sorted by disease-boosted cosine similarity;
+    # keep the strongest ones (no dedicated rerank model on Gemini)
+    return chunks[:top_k]
 
 
-def get_greenpt_client():
+def get_ai_client():
     return client
 
 

@@ -64,10 +64,10 @@ def startup():
     finally:
         db.close()
     try:
-        from app.services.greenpt import load_kb
+        from app.services.ai import load_kb
         load_kb()
     except Exception as e:
-        print(f"GreenPT KB load skipped (add API key to .env): {e}")
+        print(f"AI KB load skipped (add GEMINI_API_KEY to .env): {e}")
 
 @app.get("/health")
 def health():

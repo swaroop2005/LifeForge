@@ -3,7 +3,8 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from sqlalchemy.orm import Session
 from app.models import BloodBank, BloodStock, BloodRequest, Donation, Patient
-from app.services.greenpt import get_greenpt_client
+from app.services.ai import get_ai_client
+from app.config import settings
 from app.services.disease_demand import build_disease_demand_context
 
 CSV_PATH = Path(__file__).parent.parent.parent / "data" / "eraktkosh_stock.csv"
@@ -129,9 +130,9 @@ O- universal donor: only 7% of population, always critically needed in emergenci
 
 Identify critical shortages, regions at risk, and provide specific actionable recommendations. Consider the disease burden (patient counts above are research-backed from published epidemiology), seasonal supply pressure, component-specific needs (PRBCs vs Platelets vs FFP), and pending requests when assessing urgency."""
 
-    client = get_greenpt_client()
+    client = get_ai_client()
     response = client.chat.completions.create(
-        model="green-r-raw",
+        model=settings.ai_chat_model,
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_message},

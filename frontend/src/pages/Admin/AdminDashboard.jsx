@@ -45,7 +45,7 @@ export default function AdminDashboard() {
 
   const runGreenR = async () => {
     setGreenrLoading(true)
-    setGreenrMsg('GreenR reasoning... this may take 10-20s')
+    setGreenrMsg('AI reasoning... this may take 10-20s')
     try {
       const res = await api.runGreenRAnalysis()
       if (res.summary) {
@@ -55,7 +55,7 @@ export default function AdminDashboard() {
         setGreenrMsg(res.detail || 'Analysis failed.')
       }
     } catch {
-      setGreenrMsg('GreenR request failed.')
+      setGreenrMsg('AI analysis failed.')
     }
     setGreenrLoading(false)
   }
@@ -184,13 +184,13 @@ export default function AdminDashboard() {
       {tab === 'predictions' && (
         <div className="space-y-8">
 
-          {/* GreenR AI Analysis */}
+          {/* AI Shortage Analysis */}
           <div>
             <div className="flex items-center justify-between mb-4">
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <h2 className="text-lg font-bold text-gray-900">GreenPT AI Shortage Analysis</h2>
-                  <span className="text-xs font-bold bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-lg">green-r-raw</span>
+                  <h2 className="text-lg font-bold text-gray-900">AI Shortage Analysis</h2>
+                  <span className="text-xs font-bold bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-lg">Gemini 2.5 Flash</span>
                 </div>
                 <p className="text-xs text-gray-400">Reasoning model analyses live stock + disease burden + seasonal patterns</p>
               </div>
@@ -200,7 +200,7 @@ export default function AdminDashboard() {
                   className="bg-emerald-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-emerald-700 transition-colors disabled:opacity-60 flex items-center gap-2">
                   {greenrLoading ? (
                     <><span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />Reasoning...</>
-                  ) : '🧠 Run GreenR Analysis'}
+                  ) : '🧠 Run AI Analysis'}
                 </button>
               </div>
             </div>
@@ -208,8 +208,8 @@ export default function AdminDashboard() {
             {!greenrAnalysis && !greenrLoading && (
               <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-8 text-center">
                 <p className="text-3xl mb-3">🧠</p>
-                <p className="text-sm font-semibold text-emerald-800 mb-1">GreenR AI not yet run</p>
-                <p className="text-xs text-emerald-600">Click "Run GreenR Analysis" to get AI-powered shortage predictions using live blood bank data + India disease statistics</p>
+                <p className="text-sm font-semibold text-emerald-800 mb-1">AI analysis not yet run</p>
+                <p className="text-xs text-emerald-600">Click "Run AI Analysis" to get AI-powered shortage predictions using live blood bank data + India disease statistics</p>
               </div>
             )}
 

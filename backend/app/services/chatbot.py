@@ -3,6 +3,7 @@ from datetime import datetime
 from pathlib import Path
 from sqlalchemy.orm import Session
 from app.models import Donor, BloodStock, BloodJourney, Donation
+from app.config import settings
 
 _CSV_PATH = Path(__file__).parent.parent.parent / "data" / "eraktkosh_stock.csv"
 _df_cache = None
@@ -80,33 +81,6 @@ Your personality:
 
 If asked about something outside blood disorders or general health, politely say you specialise in blood disorder support.""",
 
-    "hi": """आप LifeForge सहायक हैं — रक्त विकारों से जूझ रहे लोगों के लिए एक गर्मजोशी से भरे, जानकार स्वास्थ्य साथी। आप मरीजों, दाताओं और देखभाल करने वालों की मदद करते हैं।
-
-आप इन विषयों के विशेषज्ञ हैं:
-- थैलेसीमिया: रक्त आधान, आहार, थकान प्रबंधन
-- सिकल सेल रोग: दर्द प्रबंधन, जलयोजन, आहार
-- हीमोफीलिया: रक्तस्राव सावधानियां, जोड़ों की सुरक्षा
-- आयरन की कमी से एनीमिया: आहार, आयरन युक्त खाद्य पदार्थ
-- रक्तदान: पात्रता, प्रक्रिया, देखभाल
-- रक्त संगतता
-
-हमेशा हिंदी में उत्तर दें। गर्मजोशी से और सरल भाषा में बात करें।""",
-
-    "te": """IMPORTANT INSTRUCTION: You MUST respond ONLY in Telugu language. Do NOT use Japanese, Chinese, or any other language. Only Telugu script.
-
-మీరు LifeForge సహాయకుడు — రక్త రుగ్మతలతో పోరాడుతున్న వ్యక్తులకు స్నేహపూర్వకంగా సహాయపడే ఆరోగ్య సహచరుడు. మీరు రోగులకు, దాతలకు మరియు సంరక్షకులకు సహాయపడతారు.
-
-మీకు ఈ విషయాలలో నైపుణ్యం ఉంది:
-- థలసేమియా: రక్త మార్పిడి, ఆహారం, అలసట నిర్వహణ, జన్యు సలహా
-- సికిల్ సెల్ వ్యాధి: నొప్పి నిర్వహణ, నీటి పుష్కలత, ఆహారం, ట్రిగ్గర్లు నివారించడం
-- హిమోఫిలియా: రక్తస్రావం జాగ్రత్తలు, కీళ్ళ రక్షణ, సురక్షిత కార్యకలాపాలు
-- ఇనుప లోపం రక్తహీనత: ఆహారం, ఇనుము అధికంగా ఉన్న ఆహారాలు
-- రక్తదానం: అర్హత, ప్రక్రియ, తర్వాత సంరక్షణ
-- రక్త అనుకూలత: ABO మరియు Rh రకాలు
-
-మీ వ్యక్తిత్వం: స్నేహపూర్వకంగా, సానుభూతితో మరియు సరళమైన తెలుగులో మాట్లాడండి.
-
-REMINDER: Always answer in Telugu only. తెలుగులో మాత్రమే సమాధానం ఇవ్వండి."""
 }
 
 DISEASE_RULES = {
@@ -239,8 +213,8 @@ def execute_tool(name: str, args: dict, db: Session) -> str:
 def chat(message: str, language: str, user_id, db: Session,
          history: list = None, disease_filter: str = None, donor_id: str = None) -> str:
     try:
-        from app.services.greenpt import retrieve_chunks, rerank_chunks, get_greenpt_client
-        client = get_greenpt_client()
+        from app.services.ai import retrieve_chunks, rerank_chunks, get_ai_client
+        client = get_ai_client()
         # disease-aware retrieval: boost chunks matching patient's disease
         chunks = retrieve_chunks(message, top_k=20, disease_filter=disease_filter)
         top_chunks = rerank_chunks(message, chunks, top_k=5)
@@ -254,8 +228,8 @@ def chat(message: str, language: str, user_id, db: Session,
         context = "\n\n".join(context_parts) if context_parts else ""
     except Exception:
         context = ""
-        from app.services.greenpt import get_greenpt_client
-        client = get_greenpt_client()
+        from app.services.ai import get_ai_client
+        client = get_ai_client()
 
     lang = language if language in SYSTEM_PROMPT else "en"
     sys_content = SYSTEM_PROMPT[lang]
@@ -272,7 +246,7 @@ def chat(message: str, language: str, user_id, db: Session,
     if context:
         sys_content += f"\n\n--- Verified knowledge from NIH ODS and LifeForge (cite source when relevant) ---\n{context}"
 
-    # green-l-raw supports custom system prompts
+    # system prompt + RAG context
     messages = [{"role": "system", "content": sys_content}]
 
     if history:
@@ -282,7 +256,7 @@ def chat(message: str, language: str, user_id, db: Session,
     messages.append({"role": "user", "content": message})
 
     resp = client.chat.completions.create(
-        model="green-l-raw",
+        model=settings.ai_chat_model,
         messages=messages,
         tools=MCP_TOOLS,
         tool_choice="auto",
@@ -316,7 +290,7 @@ def chat(message: str, language: str, user_id, db: Session,
         messages.extend(tool_results)
 
         resp2 = client.chat.completions.create(
-            model="green-l-raw",
+            model=settings.ai_chat_model,
             messages=messages,
             max_tokens=600,
             temperature=0.7,

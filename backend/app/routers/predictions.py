@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.deps import require_role
-from app.services.greenpt_prediction import run_greenr_analysis
+from app.services.ai_prediction import run_greenr_analysis
 from app.services.disease_demand import compute_monthly_demand, DISEASE_STATE_PATIENTS
 from app.models import GreenRAnalysis
 
