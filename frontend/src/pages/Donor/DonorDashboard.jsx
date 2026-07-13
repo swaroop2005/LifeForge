@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { Droplets, Heart, Syringe, Gift, ClipboardList, Route, Bell, Clock, CheckCircle, AlertTriangle, Trophy, MessageCircle, Send } from 'lucide-react'
 import Layout from '../../components/Layout'
 import BloodTypeTag from '../../components/BloodTypeTag'
@@ -125,7 +125,12 @@ export default function DonorDashboard() {
   const [chatJourney, setChatJourney] = useState(null)
   const [chatMsgs, setChatMsgs] = useState([])
   const [chatInput, setChatInput] = useState('')
+  const chatBottomRef = useRef(null)
   const quote = useMemo(() => IMPACT_QUOTES[Math.floor(Math.random() * IMPACT_QUOTES.length)], [])
+
+  useEffect(() => {
+    chatBottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+  }, [chatMsgs])
 
   useEffect(() => {
     api.getDonorProfile().then(setProfile)
@@ -530,6 +535,7 @@ export default function DonorDashboard() {
                               </div>
                             </div>
                           ))}
+                          <div ref={chatBottomRef} />
                         </div>
                         <div className="p-3 bg-white flex gap-2">
                           <input value={chatInput} onChange={e => setChatInput(e.target.value)}

@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom'
 import {
   Heart, Droplets, Building2, ShieldCheck, Route, Bot,
-  BarChart3, Trophy, Hospital, MessageCircle, Leaf, Lock,
-  Globe, Zap, Wrench, ChevronRight, ArrowRight
+  BarChart3, Trophy, Hospital, MessageCircle, Lock,
+  Database, Zap, Wrench, ChevronRight, ArrowRight, Sparkles, Brain
 } from 'lucide-react'
 import ChatbotWidget from '../../components/ChatbotWidget'
 
@@ -14,16 +14,16 @@ const PORTAL_CARDS = [
 ]
 
 const STATS = [
-  { val: '4,114', label: 'Blood Banks' },
-  { val: '8', label: 'Blood Types' },
+  { val: '4,000+', label: 'Blood Banks' },
+  { val: '36', label: 'States & UTs' },
   { val: '4', label: 'Role Portals' },
-  { val: '3', label: 'Languages' },
+  { val: '24/7', label: 'AI Assistant' },
 ]
 
 const FEATURES = [
   { icon: Route, title: 'Blood Journey Tracking', desc: 'Trace every unit from donor to patient. Real-time status, full transparency.' },
-  { icon: Bot, title: 'AI Chatbot (GreenPT)', desc: 'Multilingual assistant in English, Hindi & Telugu. Disease diet, eligibility, compatibility — powered by sustainable EU AI.' },
-  { icon: BarChart3, title: 'Shortage Prediction', desc: 'RandomForest ML predicts regional blood shortages before they happen. Admin heatmap shows risk in real time.' },
+  { icon: Bot, title: 'AI Health Companion', desc: 'RAG-grounded assistant with live data tools — disease diet, donor eligibility, compatibility, and real blood availability.' },
+  { icon: BarChart3, title: 'Shortage Prediction', desc: 'AI reasoning over live stock, disease epidemiology and seasonal patterns forecasts shortages before they happen.' },
   { icon: Trophy, title: 'Donor Gamification', desc: 'Points, badges and leaderboards motivate repeat donors. First Drop → Lifesaver → Hero.' },
   { icon: Hospital, title: 'Hospital Portal', desc: 'Request blood, view nearby banks with live stock, and trace donations directly to patients.' },
   { icon: MessageCircle, title: 'Patient–Donor Chat', desc: 'After a journey is accepted, patients can send one message and open a private chat with their donor.' },
@@ -41,17 +41,17 @@ const DISEASES_LIST = [
 const HOW_IT_WORKS = [
   { step: '01', title: 'Register your role', desc: 'Patient, Donor, Hospital or Admin — each gets a tailored portal with the right tools.' },
   { step: '02', title: 'Connect with the network', desc: 'Patients request blood. Donors record donations. Hospitals trace units. Admin monitors everything.' },
-  { step: '03', title: 'AI handles the complexity', desc: 'GreenPT chatbot answers questions in your language. ML predicts shortages. MCP tools check compatibility.' },
+  { step: '03', title: 'AI handles the complexity', desc: 'The assistant answers health questions from verified knowledge, checks live blood availability, and forecasts shortages.' },
   { step: '04', title: 'Save lives, earn recognition', desc: 'Every donation is tracked, gamified, and traced to the patient it helped. Impact is visible and real.' },
 ]
 
-const GREENPT_POINTS = [
-  { icon: Leaf, text: '40–50% less CO₂ vs traditional cloud AI' },
-  { icon: Droplets, text: '93% less water consumption' },
-  { icon: Lock, text: 'EU-hosted — patient data stays private' },
-  { icon: Globe, text: 'Multilingual: English, Hindi, Telugu' },
-  { icon: Zap, text: 'Router auto-selects best model (GreenL / GreenR)' },
-  { icon: Wrench, text: '4 MCP tools: eligibility, compatibility, alerts, impact' },
+const AI_POINTS = [
+  { icon: Database, text: 'Grounded in real eRaktKosh data — 4,000+ blood banks, 47,000+ live stock records' },
+  { icon: Brain, text: 'RAG over verified medical knowledge (NIH ODS + curated disease guidance)' },
+  { icon: Wrench, text: '5 live tools: eligibility, compatibility, shortage alerts, donor impact, bank search' },
+  { icon: Sparkles, text: 'Disease-aware answers — thalassemia patients never get iron advice' },
+  { icon: Zap, text: 'Reasoning engine forecasts shortages from stock + epidemiology' },
+  { icon: Lock, text: 'Role-based access — patients, donors and hospitals see only what they should' },
 ]
 
 export default function LandingPage() {
@@ -77,8 +77,8 @@ export default function LandingPage() {
             <a href="/leaderboard" className="hover:text-red-600 transition-colors font-medium">Leaderboard</a>
           </div>
           <div className="flex items-center gap-3">
-            <span className="hidden sm:flex items-center gap-1.5 text-xs text-green-600 font-medium bg-green-50 px-3 py-1 rounded-full">
-              <Leaf size={11} /> Powered by GreenPT
+            <span className="hidden sm:flex items-center gap-1.5 text-xs text-red-600 font-medium bg-red-50 px-3 py-1 rounded-full">
+              <Sparkles size={11} /> AI-Powered · Real Data
             </span>
             <a href="#auth" className="bg-red-600 text-white px-5 py-2 rounded-xl text-sm font-semibold hover:bg-red-700 transition-colors">
               Get Started
@@ -88,8 +88,12 @@ export default function LandingPage() {
       </nav>
 
       {/* ── HERO ── */}
-      <section className="pt-16 min-h-screen flex items-center bg-gradient-to-br from-red-700 via-red-600 to-rose-500">
-        <div className="max-w-7xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-16 items-center w-full">
+      <section className="pt-16 min-h-screen flex items-center bg-gradient-to-br from-red-700 via-red-600 to-rose-500 relative overflow-hidden">
+        {/* decorative orbs */}
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-rose-400/30 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-[28rem] h-[28rem] bg-red-900/40 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/3 right-0 w-72 h-72 bg-white/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="max-w-7xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-16 items-center w-full relative">
 
           {/* Left — Copy */}
           <div className="text-white">
@@ -98,13 +102,13 @@ export default function LandingPage() {
               Universal Blood Disorder Support Platform
             </div>
             <h1 className="text-5xl md:text-6xl font-bold leading-tight mb-6">
-              Every Drop<br />
-              <span className="text-red-200">Traced.</span><br />
-              Every Life<br />
-              <span className="text-red-200">Counted.</span>
+              Forging the<br />
+              <span className="text-red-200">lifeline</span> between<br />
+              donors and<br />
+              <span className="text-red-200">patients.</span>
             </h1>
             <p className="text-red-100 text-lg leading-relaxed mb-8 max-w-md">
-              LifeForge connects patients, donors, and hospitals across thalassemia, sickle cell, hemophilia, anemia and more — powered by sustainable GreenPT AI.
+              LifeForge connects patients, donors, and hospitals across thalassemia, sickle cell, hemophilia, anemia and more — every unit traced, every question answered by AI.
             </p>
 
             {/* Stats */}
@@ -152,7 +156,7 @@ export default function LandingPage() {
             </div>
 
             <p className="text-center text-xs text-gray-400 mt-6">
-              Sustainable AI · EU-hosted · Privacy first
+              Real data · AI-assisted · Privacy first
             </p>
           </div>
         </div>
@@ -228,9 +232,9 @@ export default function LandingPage() {
               </div>
             </div>
             <div className="bg-gradient-to-br from-red-600 to-rose-500 rounded-3xl p-10 text-white">
-              <h3 className="text-2xl font-bold mb-6">GreenPT AI Advantage</h3>
+              <h3 className="text-2xl font-bold mb-6">The LifeForge AI Advantage</h3>
               <div className="space-y-5">
-                {GREENPT_POINTS.map(item => {
+                {AI_POINTS.map(item => {
                   const Icon = item.icon
                   return (
                     <div key={item.text} className="flex items-start gap-3">
@@ -273,9 +277,8 @@ export default function LandingPage() {
               </div>
             </div>
             <div className="flex items-center gap-2 text-xs">
-              <span>Powered by</span>
-              <span className="text-green-400 font-semibold">GreenPT</span>
-              <span>· STEMINATE HACKS 2026</span>
+              <span>Built for</span>
+              <span className="text-red-400 font-semibold">ImpactForge 2026</span>
             </div>
             <p className="text-xs">© 2026 LifeForge · Built for impact</p>
           </div>

@@ -85,8 +85,10 @@ def _journey_detail(j: BloodJourney, db: Session):
         "id": j.id,
         "notified_at": j.notified_at,
         "chat_accepted": j.chat_accepted,
+        "status": "fulfilled" if j.chat_accepted else "pending",
         "donor_name": donor.name if donor else "Anonymous donor",
         "donor_blood_type": donor.blood_type if donor else None,
+        "blood_type": donor.blood_type if donor else None,
         "donor_badge": donor.badge if donor else None,
         "quantity": donation.quantity if donation else 1,
     }
