@@ -37,20 +37,20 @@ export default function AdminLogin() {
     setLoading(false)
   }
 
-  const inputCls = "w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 outline-none focus:border-red-400 focus:bg-white transition-colors placeholder-gray-400"
+  const inputCls = "w-full bg-ink border border-white/10 rounded-xl px-4 py-3 text-sm text-zinc-200 outline-none focus:border-red-400 focus:bg-white/10 transition-colors placeholder-gray-400"
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-red-950 flex items-center justify-center">
       <div className="w-full max-w-md">
-        <div className="bg-white rounded-3xl shadow-2xl p-8">
+        <div className="bg-panel rounded-3xl shadow-2xl p-8">
           <div className="text-center mb-8">
             <div className="w-14 h-14 bg-red-600 rounded-2xl flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">V</div>
-            <h1 className="text-2xl font-bold text-gray-900">Admin Portal</h1>
-            <p className="text-gray-400 text-sm mt-1">LifeForge — Restricted Access</p>
+            <h1 className="text-2xl font-bold text-zinc-100">Admin Portal</h1>
+            <p className="text-zinc-500 text-sm mt-1">LifeForge — Restricted Access</p>
           </div>
 
           {error && (
-            <div className="text-sm mb-5 px-4 py-3 rounded-xl bg-red-50 text-red-600 border border-red-200">
+            <div className="text-sm mb-5 px-4 py-3 rounded-xl bg-red-500/10 text-red-400 border border-red-500/30">
               {error}
             </div>
           )}
@@ -62,7 +62,7 @@ export default function AdminLogin() {
               <input value={form.password} onChange={e => set('password', e.target.value)} required
                 type={showPw ? 'text' : 'password'} placeholder="Password" className={inputCls + ' pr-11'} />
               <button type="button" onClick={() => setShowPw(p => !p)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors">
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-400 transition-colors">
                 {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             </div>
@@ -72,7 +72,7 @@ export default function AdminLogin() {
             </button>
           </form>
 
-          <p className="text-center text-xs text-gray-400 mt-6">
+          <p className="text-center text-xs text-zinc-500 mt-6">
             <a href="/" className="hover:text-red-500 transition-colors">← Back to LifeForge</a>
           </p>
         </div>

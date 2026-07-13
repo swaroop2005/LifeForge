@@ -1,4 +1,68 @@
 @import "tailwindcss";
 
-body { margin: 0; }
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", "Inter", ui-sans-serif, sans-serif;
+
+  --color-ink: #0d0d10;          /* page background */
+  --color-panel: #141419;        /* raised surface */
+  --color-panel-2: #1b1b22;      /* higher surface */
+  --color-crimson: #e63946;      /* primary */
+  --color-coral: #ff6b6b;        /* accent */
+  --color-ember: #ff8787;        /* soft accent text */
+}
+
+body {
+  margin: 0;
+  background: #0d0d10;
+  color: #f4f4f5;
+  font-family: var(--font-sans);
+}
+
 #root { width: 100%; }
+
+h1, h2, h3, .font-display {
+  font-family: var(--font-display);
+}
+
+/* glass panel */
+.glass {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px);
+}
+
+/* crimson glow */
+.glow {
+  box-shadow: 0 0 40px -8px rgba(230, 57, 70, 0.45);
+}
+.glow-sm {
+  box-shadow: 0 0 24px -6px rgba(230, 57, 70, 0.35);
+}
+
+/* subtle grid backdrop for hero sections */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+/* dark scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: #0d0d10; }
+::-webkit-scrollbar-thumb { background: #2a2a33; border-radius: 6px; }
+::-webkit-scrollbar-thumb:hover { background: #3a3a45; }
+
+/* leaflet dark chrome */
+.leaflet-container { background: #101014; }
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+  background: #1b1b22;
+  color: #f4f4f5;
+}
+.leaflet-bar a {
+  background: #1b1b22;
+  color: #f4f4f5;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+.leaflet-bar a:hover { background: #26262e; }

@@ -7,10 +7,10 @@ import {
 import ChatbotWidget from '../../components/ChatbotWidget'
 
 const PORTAL_CARDS = [
-  { role: 'patient', icon: Heart, label: 'Patient', desc: 'Track disorders, request blood, chat with donors', href: '/login/patient', color: 'border-red-200 hover:border-red-400 hover:bg-red-50', iconBg: 'bg-red-100 text-red-600' },
-  { role: 'donor', icon: Droplets, label: 'Donor', desc: 'Record donations, earn badges, see your impact', href: '/login/donor', color: 'border-orange-200 hover:border-orange-400 hover:bg-orange-50', iconBg: 'bg-orange-100 text-orange-600' },
-  { role: 'hospital', icon: Building2, label: 'Hospital', desc: 'Request blood, trace donations, view nearby banks', href: '/login/hospital', color: 'border-blue-200 hover:border-blue-400 hover:bg-blue-50', iconBg: 'bg-blue-100 text-blue-600' },
-  { role: 'admin', icon: ShieldCheck, label: 'Admin', desc: 'Monitor the network, view heatmaps and predictions', href: '/admin-login', color: 'border-gray-200 hover:border-gray-400 hover:bg-gray-50', iconBg: 'bg-gray-100 text-gray-600' },
+  { role: 'patient', icon: Heart, label: 'Patient', desc: 'Track disorders, request blood, chat with donors', href: '/login/patient', color: 'border-red-500/30 hover:border-red-500/60 hover:bg-red-500/15', iconBg: 'bg-red-500/15 text-red-400' },
+  { role: 'donor', icon: Droplets, label: 'Donor', desc: 'Record donations, earn badges, see your impact', href: '/login/donor', color: 'border-orange-500/30 hover:border-orange-400 hover:bg-orange-500/10', iconBg: 'bg-orange-500/15 text-orange-400' },
+  { role: 'hospital', icon: Building2, label: 'Hospital', desc: 'Request blood, trace donations, view nearby banks', href: '/login/hospital', color: 'border-blue-500/30 hover:border-blue-400 hover:bg-blue-500/10', iconBg: 'bg-blue-500/15 text-blue-400' },
+  { role: 'admin', icon: ShieldCheck, label: 'Admin', desc: 'Monitor the network, view heatmaps and predictions', href: '/admin-login', color: 'border-white/10 hover:border-white/25 hover:bg-white/5', iconBg: 'bg-white/10 text-zinc-400' },
 ]
 
 const STATS = [
@@ -30,12 +30,12 @@ const FEATURES = [
 ]
 
 const DISEASES_LIST = [
-  { name: 'Thalassemia', color: 'bg-red-100 text-red-700' },
-  { name: 'Sickle Cell', color: 'bg-orange-100 text-orange-700' },
-  { name: 'Hemophilia A & B', color: 'bg-purple-100 text-purple-700' },
-  { name: 'Iron Deficiency Anemia', color: 'bg-yellow-100 text-yellow-700' },
-  { name: 'Aplastic Anemia', color: 'bg-blue-100 text-blue-700' },
-  { name: 'Von Willebrand', color: 'bg-green-100 text-green-700' },
+  { name: 'Thalassemia', color: 'bg-red-500/15 text-red-400' },
+  { name: 'Sickle Cell', color: 'bg-orange-500/15 text-orange-400' },
+  { name: 'Hemophilia A & B', color: 'bg-purple-500/15 text-purple-400' },
+  { name: 'Iron Deficiency Anemia', color: 'bg-yellow-500/15 text-yellow-400' },
+  { name: 'Aplastic Anemia', color: 'bg-blue-500/15 text-blue-400' },
+  { name: 'Von Willebrand', color: 'bg-green-500/15 text-green-400' },
 ]
 
 const HOW_IT_WORKS = [
@@ -58,26 +58,26 @@ export default function LandingPage() {
   const nav = useNavigate()
 
   return (
-    <div className="min-h-screen bg-white font-sans">
+    <div className="min-h-screen bg-ink font-sans">
 
       {/* ── TOP NAV ── */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur border-b border-gray-100">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-ink/85 backdrop-blur border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <a href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <span className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center">
+            <span className="w-8 h-8 bg-gradient-to-br from-crimson to-coral rounded-lg glow-sm flex items-center justify-center">
               <Droplets size={16} className="text-white" />
             </span>
-            <span className="font-bold text-gray-900 text-lg">LifeForge</span>
+            <span className="font-bold text-zinc-100 text-lg">LifeForge</span>
           </a>
-          <div className="hidden md:flex items-center gap-8 text-sm text-gray-500">
-            <a href="#features" className="hover:text-red-600 transition-colors">Features</a>
-            <a href="#how" className="hover:text-red-600 transition-colors">How It Works</a>
-            <a href="#diseases" className="hover:text-red-600 transition-colors">Diseases</a>
-            <a href="/community" className="hover:text-red-600 transition-colors font-medium">Community</a>
-            <a href="/leaderboard" className="hover:text-red-600 transition-colors font-medium">Leaderboard</a>
+          <div className="hidden md:flex items-center gap-8 text-sm text-zinc-400">
+            <a href="#features" className="hover:text-red-400 transition-colors">Features</a>
+            <a href="#how" className="hover:text-red-400 transition-colors">How It Works</a>
+            <a href="#diseases" className="hover:text-red-400 transition-colors">Diseases</a>
+            <a href="/community" className="hover:text-red-400 transition-colors font-medium">Community</a>
+            <a href="/leaderboard" className="hover:text-red-400 transition-colors font-medium">Leaderboard</a>
           </div>
           <div className="flex items-center gap-3">
-            <span className="hidden sm:flex items-center gap-1.5 text-xs text-red-600 font-medium bg-red-50 px-3 py-1 rounded-full">
+            <span className="hidden sm:flex items-center gap-1.5 text-xs text-red-400 font-medium bg-red-500/10 px-3 py-1 rounded-full">
               <Sparkles size={11} /> AI-Powered · Real Data
             </span>
             <a href="#auth" className="bg-red-600 text-white px-5 py-2 rounded-xl text-sm font-semibold hover:bg-red-700 transition-colors">
@@ -88,53 +88,53 @@ export default function LandingPage() {
       </nav>
 
       {/* ── HERO ── */}
-      <section className="pt-16 min-h-screen flex items-center bg-gradient-to-br from-red-700 via-red-600 to-rose-500 relative overflow-hidden">
+      <section className="pt-16 min-h-screen flex items-center bg-ink grid-bg relative overflow-hidden">
         {/* decorative orbs */}
-        <div className="absolute -top-24 -left-24 w-96 h-96 bg-rose-400/30 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-[28rem] h-[28rem] bg-red-900/40 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute top-1/3 right-0 w-72 h-72 bg-white/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-crimson/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-[28rem] h-[28rem] bg-crimson/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/3 right-0 w-72 h-72 bg-coral/10 rounded-full blur-3xl pointer-events-none" />
         <div className="max-w-7xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-16 items-center w-full relative">
 
           {/* Left — Copy */}
-          <div className="text-white">
-            <div className="inline-flex items-center gap-2 bg-white/20 text-white text-xs font-medium px-4 py-2 rounded-full mb-6">
-              <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+          <div className="text-zinc-100">
+            <div className="inline-flex items-center gap-2 glass text-zinc-300 text-xs font-medium px-4 py-2 rounded-full mb-6">
+              <span className="w-2 h-2 bg-crimson rounded-full animate-pulse"></span>
               Universal Blood Disorder Support Platform
             </div>
             <h1 className="text-5xl md:text-6xl font-bold leading-tight mb-6">
               Forging the<br />
-              <span className="text-red-200">lifeline</span> between<br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-crimson to-coral">lifeline</span> between<br />
               donors and<br />
-              <span className="text-red-200">patients.</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-crimson to-coral">patients.</span>
             </h1>
-            <p className="text-red-100 text-lg leading-relaxed mb-8 max-w-md">
+            <p className="text-zinc-400 text-lg leading-relaxed mb-8 max-w-md">
               LifeForge connects patients, donors, and hospitals across thalassemia, sickle cell, hemophilia, anemia and more — every unit traced, every question answered by AI.
             </p>
 
             {/* Stats */}
             <div className="grid grid-cols-4 gap-4">
               {STATS.map(s => (
-                <div key={s.label} className="bg-white/15 backdrop-blur rounded-2xl p-4 text-center border border-white/20">
-                  <p className="text-2xl font-bold text-white">{s.val}</p>
-                  <p className="text-red-200 text-xs mt-1">{s.label}</p>
+                <div key={s.label} className="glass rounded-2xl p-4 text-center">
+                  <p className="text-2xl font-bold text-zinc-100">{s.val}</p>
+                  <p className="text-zinc-500 text-xs mt-1">{s.label}</p>
                 </div>
               ))}
             </div>
 
-            <div className="mt-8 pt-8 border-t border-white/20">
-              <p className="text-red-200 text-xs mb-3">Designed for NGOs like</p>
+            <div className="mt-8 pt-8 border-t border-white/10">
+              <p className="text-zinc-500 text-xs mb-3">Designed for NGOs like</p>
               <div className="flex flex-wrap gap-2">
                 {['Blood Warriors', 'Thalassemia Society', 'Hemophilia Federation', 'SCDAA'].map(n => (
-                  <span key={n} className="bg-white/10 text-white text-xs px-3 py-1.5 rounded-lg border border-white/20">{n}</span>
+                  <span key={n} className="glass text-zinc-300 text-xs px-3 py-1.5 rounded-lg">{n}</span>
                 ))}
               </div>
             </div>
           </div>
 
           {/* Right — Portal Selection */}
-          <div id="auth" className="bg-white rounded-3xl shadow-2xl p-8">
-            <h2 className="text-xl font-bold text-gray-900 mb-2">Choose your portal</h2>
-            <p className="text-gray-400 text-sm mb-6">Each role has a dedicated sign-in and registration page.</p>
+          <div id="auth" className="glass rounded-3xl p-8 glow">
+            <h2 className="text-xl font-bold text-zinc-100 mb-2">Choose your portal</h2>
+            <p className="text-zinc-500 text-sm mb-6">Each role has a dedicated sign-in and registration page.</p>
 
             <div className="space-y-3">
               {PORTAL_CARDS.map(p => {
@@ -146,16 +146,16 @@ export default function LandingPage() {
                       <Icon size={20} />
                     </div>
                     <div className="flex-1">
-                      <p className="font-bold text-gray-900 text-sm">{p.label} Portal</p>
-                      <p className="text-gray-500 text-xs mt-0.5">{p.desc}</p>
+                      <p className="font-bold text-zinc-100 text-sm">{p.label} Portal</p>
+                      <p className="text-zinc-400 text-xs mt-0.5">{p.desc}</p>
                     </div>
-                    <ChevronRight size={16} className="text-gray-300 group-hover:text-gray-500 transition-colors" />
+                    <ChevronRight size={16} className="text-zinc-600 group-hover:text-zinc-300 transition-colors" />
                   </button>
                 )
               })}
             </div>
 
-            <p className="text-center text-xs text-gray-400 mt-6">
+            <p className="text-center text-xs text-zinc-500 mt-6">
               Real data · AI-assisted · Privacy first
             </p>
           </div>
@@ -163,23 +163,23 @@ export default function LandingPage() {
       </section>
 
       {/* ── FEATURES ── */}
-      <section id="features" className="py-24 bg-gray-50">
+      <section id="features" className="py-24 bg-ink">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <span className="text-red-600 text-sm font-semibold uppercase tracking-widest">Platform Features</span>
-            <h2 className="text-4xl font-bold text-gray-900 mt-3 mb-4">Everything in one place</h2>
-            <p className="text-gray-500 text-lg max-w-xl mx-auto">From donation to delivery — every step tracked, AI-assisted, and gamified.</p>
+            <span className="text-red-400 text-sm font-semibold uppercase tracking-widest">Platform Features</span>
+            <h2 className="text-4xl font-bold text-zinc-100 mt-3 mb-4">Everything in one place</h2>
+            <p className="text-zinc-400 text-lg max-w-xl mx-auto">From donation to delivery — every step tracked, AI-assisted, and gamified.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {FEATURES.map(f => {
               const Icon = f.icon
               return (
-                <div key={f.title} className="bg-white rounded-2xl p-7 border border-gray-100 hover:border-red-200 hover:shadow-lg transition-all group">
-                  <div className="w-12 h-12 bg-red-50 rounded-2xl flex items-center justify-center mb-5 group-hover:bg-red-100 transition-colors">
-                    <Icon size={22} className="text-red-600" />
+                <div key={f.title} className="bg-panel rounded-2xl p-7 border border-white/10 hover:border-red-500/30 hover:shadow-lg transition-all group">
+                  <div className="w-12 h-12 bg-red-500/10 rounded-2xl flex items-center justify-center mb-5 group-hover:bg-red-500/15 transition-colors">
+                    <Icon size={22} className="text-red-400" />
                   </div>
-                  <h3 className="font-bold text-gray-900 text-lg mb-2">{f.title}</h3>
-                  <p className="text-gray-500 text-sm leading-relaxed">{f.desc}</p>
+                  <h3 className="font-bold text-zinc-100 text-lg mb-2">{f.title}</h3>
+                  <p className="text-zinc-400 text-sm leading-relaxed">{f.desc}</p>
                 </div>
               )
             })}
@@ -188,24 +188,24 @@ export default function LandingPage() {
       </section>
 
       {/* ── HOW IT WORKS ── */}
-      <section id="how" className="py-24 bg-white">
+      <section id="how" className="py-24 bg-panel">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <span className="text-red-600 text-sm font-semibold uppercase tracking-widest">Process</span>
-            <h2 className="text-4xl font-bold text-gray-900 mt-3 mb-4">How LifeForge works</h2>
+            <span className="text-red-400 text-sm font-semibold uppercase tracking-widest">Process</span>
+            <h2 className="text-4xl font-bold text-zinc-100 mt-3 mb-4">How LifeForge works</h2>
           </div>
           <div className="grid md:grid-cols-4 gap-8">
             {HOW_IT_WORKS.map((h, i) => (
               <div key={h.step} className="relative">
                 {i < HOW_IT_WORKS.length - 1 && (
-                  <div className="hidden md:block absolute top-8 left-full w-full h-px bg-red-100 z-0" style={{ width: 'calc(100% - 2rem)' }} />
+                  <div className="hidden md:block absolute top-8 left-full w-full h-px bg-red-500/15 z-0" style={{ width: 'calc(100% - 2rem)' }} />
                 )}
                 <div className="relative z-10">
-                  <div className="w-16 h-16 bg-red-600 text-white rounded-2xl flex items-center justify-center font-bold text-lg mb-5 shadow-lg shadow-red-200">
+                  <div className="w-16 h-16 bg-red-600 text-white rounded-2xl flex items-center justify-center font-bold text-lg mb-5 shadow-lg shadow-red-900/40">
                     {h.step}
                   </div>
-                  <h3 className="font-bold text-gray-900 text-lg mb-2">{h.title}</h3>
-                  <p className="text-gray-500 text-sm leading-relaxed">{h.desc}</p>
+                  <h3 className="font-bold text-zinc-100 text-lg mb-2">{h.title}</h3>
+                  <p className="text-zinc-400 text-sm leading-relaxed">{h.desc}</p>
                 </div>
               </div>
             ))}
@@ -214,13 +214,13 @@ export default function LandingPage() {
       </section>
 
       {/* ── DISEASES ── */}
-      <section id="diseases" className="py-24 bg-gray-50">
+      <section id="diseases" className="py-24 bg-ink">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
-              <span className="text-red-600 text-sm font-semibold uppercase tracking-widest">Coverage</span>
-              <h2 className="text-4xl font-bold text-gray-900 mt-3 mb-4">Built for every blood disorder</h2>
-              <p className="text-gray-500 text-lg leading-relaxed mb-8">
+              <span className="text-red-400 text-sm font-semibold uppercase tracking-widest">Coverage</span>
+              <h2 className="text-4xl font-bold text-zinc-100 mt-3 mb-4">Built for every blood disorder</h2>
+              <p className="text-zinc-400 text-lg leading-relaxed mb-8">
                 LifeForge is disease-agnostic. Any NGO, hospital, or patient network working on blood disorders can use the platform.
               </p>
               <div className="flex flex-wrap gap-3">
@@ -231,17 +231,18 @@ export default function LandingPage() {
                 ))}
               </div>
             </div>
-            <div className="bg-gradient-to-br from-red-600 to-rose-500 rounded-3xl p-10 text-white">
-              <h3 className="text-2xl font-bold mb-6">The LifeForge AI Advantage</h3>
-              <div className="space-y-5">
+            <div className="glass rounded-3xl p-10 glow relative overflow-hidden">
+              <div className="absolute -top-16 -right-16 w-56 h-56 bg-crimson/20 rounded-full blur-3xl pointer-events-none" />
+              <h3 className="text-2xl font-bold mb-6 text-zinc-100 relative">The LifeForge AI Advantage</h3>
+              <div className="space-y-5 relative">
                 {AI_POINTS.map(item => {
                   const Icon = item.icon
                   return (
                     <div key={item.text} className="flex items-start gap-3">
-                      <div className="w-7 h-7 rounded-lg bg-white/20 flex items-center justify-center shrink-0 mt-0.5">
-                        <Icon size={14} className="text-white" />
+                      <div className="w-7 h-7 rounded-lg bg-crimson/15 flex items-center justify-center shrink-0 mt-0.5">
+                        <Icon size={14} className="text-coral" />
                       </div>
-                      <p className="text-red-100 text-sm leading-relaxed">{item.text}</p>
+                      <p className="text-zinc-400 text-sm leading-relaxed">{item.text}</p>
                     </div>
                   )
                 })}
@@ -252,23 +253,24 @@ export default function LandingPage() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="py-20 bg-red-600">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold text-white mb-4">Ready to save lives?</h2>
-          <p className="text-red-100 text-lg mb-8">Join donors, hospitals, and patients already on the network.</p>
+      <section className="py-24 bg-ink grid-bg relative overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[36rem] h-[36rem] bg-crimson/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="max-w-4xl mx-auto px-6 text-center relative">
+          <h2 className="text-4xl font-bold text-zinc-100 mb-4">Ready to save lives?</h2>
+          <p className="text-zinc-400 text-lg mb-8">Join donors, hospitals, and patients already on the network.</p>
           <a href="#auth"
-            className="inline-flex items-center gap-2 bg-white text-red-600 font-bold px-10 py-4 rounded-2xl text-lg hover:bg-red-50 transition-colors shadow-xl">
+            className="inline-flex items-center gap-2 bg-crimson text-white font-bold px-10 py-4 rounded-2xl text-lg hover:bg-red-500 transition-colors glow">
             Get Started — It's Free <ArrowRight size={20} />
           </a>
         </div>
       </section>
 
       {/* ── FOOTER ── */}
-      <footer className="bg-gray-900 text-gray-400 py-12">
+      <footer className="bg-panel-2 text-zinc-500 py-12">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="flex items-center gap-3">
-              <span className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center">
+              <span className="w-8 h-8 bg-gradient-to-br from-crimson to-coral rounded-lg glow-sm flex items-center justify-center">
                 <Droplets size={16} className="text-white" />
               </span>
               <div>

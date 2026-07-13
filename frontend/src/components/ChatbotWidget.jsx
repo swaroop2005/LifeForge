@@ -52,13 +52,13 @@ export default function ChatbotWidget() {
   return (
     <div className="fixed bottom-6 right-6 z-50">
       {open && (
-        <div className="mb-3 w-96 bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden"
+        <div className="mb-3 w-96 bg-panel rounded-2xl shadow-2xl border border-white/10 flex flex-col overflow-hidden"
           style={{ height: '520px' }}>
 
           {/* Header */}
           <div className="bg-gradient-to-r from-red-600 to-rose-500 text-white px-4 py-3 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center text-sm font-bold">L</div>
+              <div className="w-8 h-8 bg-panel/20 rounded-xl flex items-center justify-center text-sm font-bold">L</div>
               <div>
                 <p className="font-bold text-sm">LifeForge Assistant</p>
                 <div className="flex items-center gap-1 mt-0.5">
@@ -77,20 +77,20 @@ export default function ChatbotWidget() {
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50">
+          <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-ink">
             {msgs.length === 0 && (
               <div className="flex flex-col items-center justify-center h-full gap-4">
-                <div className="w-14 h-14 bg-red-100 rounded-2xl flex items-center justify-center">
+                <div className="w-14 h-14 bg-red-500/15 rounded-2xl flex items-center justify-center">
                   <Droplets size={28} className="text-red-500" />
                 </div>
                 <div className="text-center">
-                  <p className="text-sm font-semibold text-gray-700">How can I help you?</p>
-                  <p className="text-xs text-gray-400 mt-1">Ask about diseases, diet, or donation</p>
+                  <p className="text-sm font-semibold text-zinc-300">How can I help you?</p>
+                  <p className="text-xs text-zinc-500 mt-1">Ask about diseases, diet, or donation</p>
                 </div>
                 <div className="w-full space-y-2 mt-2">
                   {SUGGESTIONS.map(s => (
                     <button key={s} onClick={() => send(s)}
-                      className="w-full text-left text-xs bg-white border border-gray-200 text-gray-600 px-3 py-2.5 rounded-xl hover:border-red-300 hover:text-red-600 transition-colors">
+                      className="w-full text-left text-xs bg-panel border border-white/10 text-zinc-400 px-3 py-2.5 rounded-xl hover:border-red-500/50 hover:text-red-400 transition-colors">
                       {s}
                     </button>
                   ))}
@@ -101,12 +101,12 @@ export default function ChatbotWidget() {
             {msgs.map((m, i) => (
               <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 {m.role === 'bot' && (
-                  <div className="w-7 h-7 bg-red-100 rounded-xl flex items-center justify-center text-xs font-bold text-red-600 mr-2 mt-1 shrink-0">L</div>
+                  <div className="w-7 h-7 bg-red-500/15 rounded-xl flex items-center justify-center text-xs font-bold text-red-400 mr-2 mt-1 shrink-0">L</div>
                 )}
                 <div className={`max-w-[80%] px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed
                   ${m.role === 'user'
                     ? 'bg-red-600 text-white rounded-br-sm'
-                    : 'bg-white border border-gray-100 text-gray-700 rounded-bl-sm shadow-sm'
+                    : 'bg-panel border border-white/10 text-zinc-300 rounded-bl-sm shadow-sm'
                   }`}>
                   {m.role === 'user' ? m.text : (
                     <ReactMarkdown
@@ -128,8 +128,8 @@ export default function ChatbotWidget() {
 
             {loading && (
               <div className="flex justify-start">
-                <div className="w-7 h-7 bg-red-100 rounded-xl flex items-center justify-center text-xs font-bold text-red-600 mr-2 shrink-0">V</div>
-                <div className="bg-white border border-gray-100 px-4 py-3 rounded-2xl rounded-bl-sm shadow-sm flex items-center gap-1.5">
+                <div className="w-7 h-7 bg-red-500/15 rounded-xl flex items-center justify-center text-xs font-bold text-red-400 mr-2 shrink-0">V</div>
+                <div className="bg-panel border border-white/10 px-4 py-3 rounded-2xl rounded-bl-sm shadow-sm flex items-center gap-1.5">
                   <div className="w-1.5 h-1.5 bg-red-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
                   <div className="w-1.5 h-1.5 bg-red-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
                   <div className="w-1.5 h-1.5 bg-red-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
@@ -141,12 +141,12 @@ export default function ChatbotWidget() {
           </div>
 
           {/* Input */}
-          <div className="p-3 border-t bg-white shrink-0">
+          <div className="p-3 border-t bg-panel shrink-0">
             <div className="flex gap-2 items-end">
               <input value={input} onChange={e => setInput(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && !e.shiftKey && send()}
                 placeholder="Ask anything..."
-                className="flex-1 text-sm bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 outline-none focus:border-red-400 focus:bg-white transition-colors resize-none" />
+                className="flex-1 text-sm bg-ink border border-white/10 rounded-xl px-3.5 py-2.5 outline-none focus:border-red-400 focus:bg-white/10 transition-colors resize-none" />
               <button onClick={() => send()} disabled={loading || !input.trim()}
                 className="bg-red-600 text-white w-10 h-10 rounded-xl flex items-center justify-center hover:bg-red-700 disabled:opacity-40 transition-colors shrink-0">
                 <Send size={15} />
@@ -160,7 +160,7 @@ export default function ChatbotWidget() {
       <button onClick={() => setOpen(o => !o)}
         className={`w-14 h-14 rounded-full shadow-xl flex items-center justify-center transition-all hover:scale-105 ${
           open
-            ? 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'
+            ? 'bg-panel text-zinc-300 hover:bg-white/10 border border-white/10'
             : 'bg-red-600 text-white hover:bg-red-700'
         }`}>
         {open ? <X size={20} /> : <MessageCircle size={22} />}

@@ -19,16 +19,16 @@ function TransfusionCountdown({ profile }) {
 
   return (
     <div className={`rounded-2xl p-5 mb-6 border shadow-sm ${
-      isOverdue ? 'bg-red-50 border-red-200' :
-      isSoon    ? 'bg-orange-50 border-orange-200' :
-                  'bg-blue-50 border-blue-200'
+      isOverdue ? 'bg-red-500/10 border-red-500/30' :
+      isSoon    ? 'bg-orange-500/10 border-orange-500/30' :
+                  'bg-blue-500/10 border-blue-500/30'
     }`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-            isOverdue ? 'bg-red-100' : isSoon ? 'bg-orange-100' : 'bg-blue-100'
+            isOverdue ? 'bg-red-500/15' : isSoon ? 'bg-orange-500/15' : 'bg-blue-500/15'
           }`}>
-            {isOverdue ? <AlertTriangle size={20} className="text-red-600" /> :
+            {isOverdue ? <AlertTriangle size={20} className="text-red-400" /> :
              isSoon    ? <Clock size={20} className="text-orange-500" /> :
                          <Calendar size={20} className="text-blue-500" />}
           </div>
@@ -37,7 +37,7 @@ function TransfusionCountdown({ profile }) {
               isOverdue ? 'text-red-500' : isSoon ? 'text-orange-500' : 'text-blue-500'
             }`}>Next Transfusion</p>
             <p className={`text-lg font-bold ${
-              isOverdue ? 'text-red-700' : isSoon ? 'text-orange-700' : 'text-blue-700'
+              isOverdue ? 'text-red-400' : isSoon ? 'text-orange-400' : 'text-blue-400'
             }`}>
               {isOverdue
                 ? `${Math.abs(daysLeft)} day${Math.abs(daysLeft) !== 1 ? 's' : ''} overdue`
@@ -45,7 +45,7 @@ function TransfusionCountdown({ profile }) {
                 ? 'Today'
                 : `${daysLeft} day${daysLeft !== 1 ? 's' : ''} away`}
             </p>
-            <p className="text-xs text-gray-400 mt-0.5">
+            <p className="text-xs text-zinc-500 mt-0.5">
               {next.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
               {intervalDays && ` · every ~${intervalDays} days`}
             </p>
@@ -53,11 +53,11 @@ function TransfusionCountdown({ profile }) {
         </div>
         {!isOverdue && daysLeft <= 7 && (
           <span className={`text-xs font-bold px-3 py-1.5 rounded-xl ${
-            isSoon ? 'bg-orange-200 text-orange-700' : 'bg-blue-200 text-blue-700'
+            isSoon ? 'bg-orange-200 text-orange-400' : 'bg-blue-500/25 text-blue-400'
           }`}>Contact your hospital</span>
         )}
         {isOverdue && (
-          <span className="text-xs font-bold px-3 py-1.5 rounded-xl bg-red-200 text-red-700">Urgent — call hospital</span>
+          <span className="text-xs font-bold px-3 py-1.5 rounded-xl bg-red-500/25 text-red-400">Urgent — call hospital</span>
         )}
       </div>
     </div>
@@ -141,16 +141,16 @@ export default function PatientDashboard() {
     setChatMessages(Array.isArray(msgs) ? msgs : [])
   }
 
-  const inputCls = "w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 outline-none focus:border-red-400 focus:bg-white transition-colors"
+  const inputCls = "w-full bg-ink border border-white/10 rounded-xl px-4 py-3 text-sm text-zinc-200 outline-none focus:border-red-400 focus:bg-white/10 transition-colors"
 
   return (
     <Layout role="patient" activeTab={tab} setTab={t => { setTab(t); setMsg(''); setSelectedJourney(null) }}>
 
       {profile && (
-        <div className="bg-white rounded-2xl border border-gray-100 p-5 mb-6 flex justify-between items-center shadow-sm">
+        <div className="bg-panel rounded-2xl border border-white/10 p-5 mb-6 flex justify-between items-center shadow-sm">
           <div>
-            <p className="font-bold text-gray-900 text-lg">{profile.name || localStorage.getItem('vt_name')}</p>
-            <p className="text-sm text-gray-400 capitalize mt-0.5">{profile.disease?.replace(/_/g, ' ')} · {profile.city}, {profile.state}</p>
+            <p className="font-bold text-zinc-100 text-lg">{profile.name || localStorage.getItem('vt_name')}</p>
+            <p className="text-sm text-zinc-500 capitalize mt-0.5">{profile.disease?.replace(/_/g, ' ')} · {profile.city}, {profile.state}</p>
           </div>
           <div className="flex items-center gap-3">
             <BloodTypeTag type={profile.blood_type} />
@@ -161,44 +161,44 @@ export default function PatientDashboard() {
       <TransfusionCountdown profile={profile} />
 
       {msg && (
-        <div className="bg-green-50 border border-green-200 text-green-700 text-sm px-5 py-3 rounded-xl mb-5">{msg}</div>
+        <div className="bg-green-500/10 border border-green-500/30 text-green-400 text-sm px-5 py-3 rounded-xl mb-5">{msg}</div>
       )}
 
       {/* ── REQUESTS ── */}
       {tab === 'requests' && (
         <div>
           <div className="flex items-center justify-between mb-5">
-            <h2 className="text-lg font-bold text-gray-900">Blood Requests</h2>
+            <h2 className="text-lg font-bold text-zinc-100">Blood Requests</h2>
             <button onClick={() => setTab('new-request')}
               className="bg-red-600 text-white text-sm px-4 py-2 rounded-xl font-semibold hover:bg-red-700 transition-colors">
               + New Request
             </button>
           </div>
           {requests.length === 0 && (
-            <div className="bg-white rounded-2xl border border-dashed border-gray-200 p-12 text-center">
-              <div className="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center mx-auto mb-3">
+            <div className="bg-panel rounded-2xl border border-dashed border-white/10 p-12 text-center">
+              <div className="w-14 h-14 bg-red-500/10 rounded-2xl flex items-center justify-center mx-auto mb-3">
                 <Droplets size={24} className="text-red-300" />
               </div>
-              <p className="text-gray-400 text-sm">No requests yet. Create your first blood request.</p>
+              <p className="text-zinc-500 text-sm">No requests yet. Create your first blood request.</p>
             </div>
           )}
           <div className="space-y-3">
             {requests.map(r => (
-              <div key={r.id} className="bg-white rounded-2xl border border-gray-100 p-5 flex justify-between items-center shadow-sm hover:shadow-md transition-shadow">
+              <div key={r.id} className="bg-panel rounded-2xl border border-white/10 p-5 flex justify-between items-center shadow-sm hover:shadow-md transition-shadow">
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center">
+                  <div className="w-10 h-10 bg-red-500/10 rounded-xl flex items-center justify-center">
                     <Droplets size={18} className="text-red-500" />
                   </div>
                   <div>
                     <div className="flex items-center gap-2 mb-1">
                       <BloodTypeTag type={r.blood_type} />
-                      <span className="text-sm font-semibold text-gray-800">{r.units} units</span>
+                      <span className="text-sm font-semibold text-zinc-200">{r.units} units</span>
                       <StatusBadge status={r.status} />
                     </div>
-                    <p className="text-xs text-gray-400">{r.hospital_name} · {r.urgency}</p>
+                    <p className="text-xs text-zinc-500">{r.hospital_name} · {r.urgency}</p>
                   </div>
                 </div>
-                <p className="text-xs text-gray-300">{new Date(r.created_at).toLocaleDateString()}</p>
+                <p className="text-xs text-zinc-600">{new Date(r.created_at).toLocaleDateString()}</p>
               </div>
             ))}
           </div>
@@ -208,29 +208,29 @@ export default function PatientDashboard() {
       {/* ── NEW REQUEST ── */}
       {tab === 'new-request' && (
         <div className="max-w-xl">
-          <h2 className="text-lg font-bold text-gray-900 mb-6">Request Blood</h2>
-          <div className="bg-white rounded-2xl border border-gray-100 p-7 shadow-sm">
+          <h2 className="text-lg font-bold text-zinc-100 mb-6">Request Blood</h2>
+          <div className="bg-panel rounded-2xl border border-white/10 p-7 shadow-sm">
             <form onSubmit={submitRequest} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2">Blood Type</label>
+                  <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wide block mb-2">Blood Type</label>
                   <select value={reqForm.blood_type} onChange={e => setReqForm(f => ({ ...f, blood_type: e.target.value }))} className={inputCls}>
                     {BLOOD_TYPES.map(bt => <option key={bt}>{bt}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2">Units Needed</label>
+                  <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wide block mb-2">Units Needed</label>
                   <input type="number" min="1" max="20" value={reqForm.units}
                     onChange={e => setReqForm(f => ({ ...f, units: e.target.value }))} className={inputCls} />
                 </div>
               </div>
               <div>
-                <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2">Hospital</label>
+                <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wide block mb-2">Hospital</label>
                 <input value={reqForm.hospital_name} onChange={e => setReqForm(f => ({ ...f, hospital_name: e.target.value }))}
                   placeholder="e.g. Apollo Hospital, Hyderabad" className={inputCls} />
               </div>
               <div>
-                <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2">Urgency</label>
+                <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wide block mb-2">Urgency</label>
                 <select value={reqForm.urgency} onChange={e => setReqForm(f => ({ ...f, urgency: e.target.value }))} className={inputCls}>
                   <option value="normal">Normal</option>
                   <option value="urgent">Urgent</option>
@@ -238,7 +238,7 @@ export default function PatientDashboard() {
                 </select>
               </div>
               <div>
-                <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2">Notes</label>
+                <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wide block mb-2">Notes</label>
                 <textarea value={reqForm.notes} onChange={e => setReqForm(f => ({ ...f, notes: e.target.value }))}
                   placeholder="Additional details..." rows={3} className={inputCls + ' resize-none'} />
               </div>
@@ -254,22 +254,22 @@ export default function PatientDashboard() {
       {/* ── JOURNEY LIST ── */}
       {tab === 'journey' && !selectedJourney && (
         <div>
-          <h2 className="text-lg font-bold text-gray-900 mb-5">Blood Journey</h2>
+          <h2 className="text-lg font-bold text-zinc-100 mb-5">Blood Journey</h2>
           {journeys.length === 0 && (
-            <div className="bg-white rounded-2xl border border-dashed border-gray-200 p-12 text-center">
-              <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center mx-auto mb-3">
-                <Route size={24} className="text-gray-300" />
+            <div className="bg-panel rounded-2xl border border-dashed border-white/10 p-12 text-center">
+              <div className="w-14 h-14 bg-ink rounded-2xl flex items-center justify-center mx-auto mb-3">
+                <Route size={24} className="text-zinc-600" />
               </div>
-              <p className="text-gray-400 text-sm">No journeys yet. Your blood journey will appear here once a hospital traces a donation to you.</p>
+              <p className="text-zinc-500 text-sm">No journeys yet. Your blood journey will appear here once a hospital traces a donation to you.</p>
             </div>
           )}
           <div className="space-y-3">
             {journeys.map(j => (
               <button key={j.id} onClick={() => openJourney(j)}
-                className="w-full bg-white rounded-2xl border border-gray-100 p-5 text-left hover:border-red-200 hover:shadow-md transition-all">
+                className="w-full bg-panel rounded-2xl border border-white/10 p-5 text-left hover:border-red-500/30 hover:shadow-md transition-all">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center">
+                    <div className="w-10 h-10 bg-red-500/10 rounded-xl flex items-center justify-center">
                       <Route size={18} className="text-red-500" />
                     </div>
                     <div>
@@ -277,13 +277,13 @@ export default function PatientDashboard() {
                         <BloodTypeTag type={j.blood_type} />
                         <StatusBadge status={j.status} />
                         {j.chat_accepted && (
-                          <span className="text-xs bg-green-100 text-green-700 font-semibold px-2 py-0.5 rounded-lg">Chat Open</span>
+                          <span className="text-xs bg-green-500/15 text-green-400 font-semibold px-2 py-0.5 rounded-lg">Chat Open</span>
                         )}
                       </div>
-                      <p className="text-xs text-gray-400">Donor: {j.donor_name || 'Anonymous'}</p>
+                      <p className="text-xs text-zinc-500">Donor: {j.donor_name || 'Anonymous'}</p>
                     </div>
                   </div>
-                  <span className="text-gray-300 text-lg">›</span>
+                  <span className="text-zinc-600 text-lg">›</span>
                 </div>
               </button>
             ))}
@@ -294,22 +294,22 @@ export default function PatientDashboard() {
       {/* ── JOURNEY DETAIL ── */}
       {tab === 'journey' && selectedJourney && (
         <div className="max-w-xl">
-          <button onClick={() => setSelectedJourney(null)} className="flex items-center gap-2 text-sm text-gray-400 hover:text-gray-700 mb-5 transition-colors">
+          <button onClick={() => setSelectedJourney(null)} className="flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-300 mb-5 transition-colors">
             <ArrowLeft size={14} /> Back to journeys
           </button>
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-            <div className="p-5 border-b flex items-center gap-3">
+          <div className="bg-panel rounded-2xl border border-white/10 shadow-sm overflow-hidden">
+            <div className="p-5 border-b border-white/10 flex items-center gap-3">
               <BloodTypeTag type={selectedJourney.blood_type} />
               <StatusBadge status={selectedJourney.status} />
-              <span className="text-sm text-gray-500 ml-1">Donor: {selectedJourney.donor_name || 'Anonymous'}</span>
+              <span className="text-sm text-zinc-400 ml-1">Donor: {selectedJourney.donor_name || 'Anonymous'}</span>
             </div>
             {selectedJourney.chat_accepted ? (
               <>
-                <div className="h-72 overflow-y-auto p-5 space-y-3 bg-gray-50">
-                  {chatMessages.length === 0 && <p className="text-center text-xs text-gray-400">Start the conversation</p>}
+                <div className="h-72 overflow-y-auto p-5 space-y-3 bg-ink">
+                  {chatMessages.length === 0 && <p className="text-center text-xs text-zinc-500">Start the conversation</p>}
                   {chatMessages.map((m, i) => (
                     <div key={i} className={`p-3.5 rounded-2xl text-sm max-w-[78%] leading-relaxed
-                      ${m.sender_role === 'patient' ? 'bg-red-600 text-white ml-auto rounded-br-sm' : 'bg-white border text-gray-700 rounded-bl-sm'}`}>
+                      ${m.sender_role === 'patient' ? 'bg-red-600 text-white ml-auto rounded-br-sm' : 'bg-panel border text-zinc-300 rounded-bl-sm'}`}>
                       {m.content}
                     </div>
                   ))}
@@ -318,7 +318,7 @@ export default function PatientDashboard() {
                   <input value={chatInput} onChange={e => setChatInput(e.target.value)}
                     onKeyDown={e => e.key === 'Enter' && sendChat()}
                     placeholder="Send a message to your donor..."
-                    className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-red-400" />
+                    className="flex-1 bg-ink border border-white/10 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-red-400" />
                   <button onClick={sendChat} className="bg-red-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-red-700">
                     Send
                   </button>
@@ -326,10 +326,10 @@ export default function PatientDashboard() {
               </>
             ) : (
               <div className="p-12 text-center">
-                <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center mx-auto mb-3">
-                  <Clock size={24} className="text-gray-300" />
+                <div className="w-14 h-14 bg-ink rounded-2xl flex items-center justify-center mx-auto mb-3">
+                  <Clock size={24} className="text-zinc-600" />
                 </div>
-                <p className="text-gray-400 text-sm">Waiting for donor to accept the chat request.</p>
+                <p className="text-zinc-500 text-sm">Waiting for donor to accept the chat request.</p>
               </div>
             )}
           </div>
@@ -341,26 +341,26 @@ export default function PatientDashboard() {
         <div>
           <div className="flex items-center justify-between mb-5">
             <div>
-              <h2 className="text-lg font-bold text-gray-900">Find Blood Near You</h2>
-              <p className="text-xs text-gray-400 mt-0.5">Live stock from 4,443 hospitals across India (eRaktKosh)</p>
+              <h2 className="text-lg font-bold text-zinc-100">Find Blood Near You</h2>
+              <p className="text-xs text-zinc-500 mt-0.5">Live stock from 4,443 hospitals across India (eRaktKosh)</p>
             </div>
             {profile?.blood_type && <BloodTypeTag type={profile.blood_type} />}
           </div>
 
-          <div className="bg-white rounded-2xl border border-gray-100 p-5 mb-5 shadow-sm">
+          <div className="bg-panel rounded-2xl border border-white/10 p-5 mb-5 shadow-sm">
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
               <div>
-                <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-1.5">State</label>
+                <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wide block mb-1.5">State</label>
                 <input value={bankFilter.state}
                   onChange={e => setBankFilter(f => ({ ...f, state: e.target.value }))}
                   placeholder="e.g. Karnataka, Delhi"
-                  className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-red-400 focus:bg-white transition-colors" />
+                  className="w-full bg-ink border border-white/10 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-red-400 focus:bg-white/10 transition-colors" />
               </div>
               <div>
-                <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-1.5">Component</label>
+                <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wide block mb-1.5">Component</label>
                 <select value={bankFilter.component}
                   onChange={e => setBankFilter(f => ({ ...f, component: e.target.value }))}
-                  className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-red-400 focus:bg-white transition-colors">
+                  className="w-full bg-ink border border-white/10 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-red-400 focus:bg-white/10 transition-colors">
                   {COMPONENTS.map(c => <option key={c}>{c}</option>)}
                 </select>
               </div>
@@ -375,34 +375,34 @@ export default function PatientDashboard() {
           </div>
 
           {bankResults.length === 0 && !bankLoading && (
-            <div className="bg-white rounded-2xl border border-dashed border-gray-200 p-12 text-center">
-              <div className="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center mx-auto mb-3">
+            <div className="bg-panel rounded-2xl border border-dashed border-white/10 p-12 text-center">
+              <div className="w-14 h-14 bg-red-500/10 rounded-2xl flex items-center justify-center mx-auto mb-3">
                 <Building2 size={24} className="text-red-300" />
               </div>
-              <p className="text-gray-400 text-sm">No results. Try a different state or component.</p>
+              <p className="text-zinc-500 text-sm">No results. Try a different state or component.</p>
             </div>
           )}
 
           <div className="space-y-3">
             {bankResults.map((b, i) => (
-              <div key={i} className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm hover:shadow-md transition-shadow">
+              <div key={i} className="bg-panel rounded-2xl border border-white/10 p-5 shadow-sm hover:shadow-md transition-shadow">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex items-start gap-3 min-w-0">
-                    <div className="w-9 h-9 bg-red-50 rounded-xl flex items-center justify-center shrink-0 mt-0.5">
+                    <div className="w-9 h-9 bg-red-500/10 rounded-xl flex items-center justify-center shrink-0 mt-0.5">
                       <Building2 size={16} className="text-red-500" />
                     </div>
                     <div className="min-w-0">
-                      <p className="font-semibold text-gray-800 text-sm leading-snug truncate">{b.hospital_name}</p>
-                      <p className="text-xs text-gray-400 mt-0.5">{b.district}, {b.state}</p>
-                      <p className="text-xs text-gray-300 mt-0.5">{b.component} · Updated {b.last_updated?.split(' ')[0]}</p>
+                      <p className="font-semibold text-zinc-200 text-sm leading-snug truncate">{b.hospital_name}</p>
+                      <p className="text-xs text-zinc-500 mt-0.5">{b.district}, {b.state}</p>
+                      <p className="text-xs text-zinc-600 mt-0.5">{b.component} · Updated {b.last_updated?.split(' ')[0]}</p>
                     </div>
                   </div>
                   <div className="text-right shrink-0">
                     <div className="flex items-center gap-1.5 justify-end">
                       <BloodTypeTag type={b.blood_group} />
                     </div>
-                    <p className="text-lg font-bold text-red-600 mt-1">{b.availability}</p>
-                    <p className="text-xs text-gray-400">units</p>
+                    <p className="text-lg font-bold text-red-400 mt-1">{b.availability}</p>
+                    <p className="text-xs text-zinc-500">units</p>
                   </div>
                 </div>
               </div>
