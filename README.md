@@ -33,7 +33,8 @@ JWT_SECRET=any_random_secret_string_here
 ```
 
 > `DATABASE_URL` is not needed — Docker spins up a fresh PostgreSQL automatically.
-> Get a free Gemini API key at https://aistudio.google.com/apikey.
+> Get a free Gemini API key at https://aistudio.google.com/apikey (takes ~2 minutes).
+> **No key?** The platform still runs fully — portals, blood bank search, journeys, leaderboard, heatmap. Only the AI chatbot and the admin "Run AI Analysis" button need the key.
 
 ```bash
 docker-compose up --build
