@@ -4,7 +4,7 @@ from typing import List, Optional
 from datetime import datetime
 from pydantic import BaseModel
 from app.database import get_db
-from app.models import Donor, Donation, BloodJourney
+from app.models import Donor, Donation, BloodJourney, Patient
 from app.deps import require_role
 from app.services.gamification import award_points
 
@@ -36,12 +36,19 @@ class DonationIn(BaseModel):
     blood_type: str
     quantity: int = 1
 
-@router.get("/profile", response_model=DonorProfileOut)
+@router.get("/profile")
 def get_profile(db: Session = Depends(get_db), user=Depends(require_role("donor"))):
     d = db.query(Donor).filter(Donor.user_id == user.id).first()
     if not d:
         raise HTTPException(404, "Profile not found")
-    return d
+    pending = db.query(BloodJourney).filter(
+        BloodJourney.donor_id == d.id, BloodJourney.chat_accepted == False).count()
+    return {
+        "id": d.id, "user_id": d.user_id, "name": d.name, "blood_type": d.blood_type,
+        "city": d.city, "state": d.state, "is_long_term": d.is_long_term,
+        "points": d.points, "badge": d.badge, "last_donation_date": d.last_donation_date,
+        "pending_journeys": pending,
+    }
 
 @router.post("/donate")
 def record_donation(data: DonationIn, db: Session = Depends(get_db),
@@ -86,6 +93,29 @@ def leaderboard(db: Session = Depends(get_db)):
             "blood_type": d.blood_type,
             "total_donations": total_donations,
             "last_donation_date": d.last_donation_date.isoformat() if d.last_donation_date else None,
+        })
+    return result
+
+@router.get("/journeys")
+def donor_journeys(db: Session = Depends(get_db), user=Depends(require_role("donor"))):
+    donor = db.query(Donor).filter(Donor.user_id == user.id).first()
+    if not donor:
+        raise HTTPException(404, "Profile not found")
+    journeys = db.query(BloodJourney).filter(BloodJourney.donor_id == donor.id)\
+        .order_by(BloodJourney.notified_at.desc()).all()
+    result = []
+    for j in journeys:
+        patient = db.query(Patient).filter(Patient.id == j.patient_id).first()
+        donation = db.query(Donation).filter(Donation.id == j.donation_id).first()
+        result.append({
+            "id": j.id,
+            "notified_at": j.notified_at,
+            "chat_accepted": j.chat_accepted,
+            "patient_name": patient.name if patient else "Unknown",
+            "patient_blood_type": patient.blood_type if patient else None,
+            "patient_city": patient.city if patient else None,
+            "patient_disease": patient.disease if patient else None,
+            "quantity": donation.quantity if donation else 1,
         })
     return result
 

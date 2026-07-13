@@ -30,6 +30,7 @@ export const api = {
   getJourney: (id) => get(`/patient/journey/${id}`),
 
   getDonorProfile: () => get('/donor/profile'),
+  getDonorJourneys: () => get('/donor/journeys'),
   getDonorHistory: () => get('/donor/history'),
   getDonorImpact: () => get('/donor/impact'),
   recordDonation: (data) => post('/donor/donate', data),
@@ -45,9 +46,8 @@ export const api = {
 
   getAdminDashboard: () => get('/admin/dashboard'),
   getHeatmap: () => get('/admin/heatmap'),
-  getPredictions: () => get('/admin/predictions'),
   getAdminUsers: () => get('/admin/users'),
-  runPredictions: () => post('/predictions/run', {}),
+  getAdminRequests: () => get('/admin/requests'),
   runGreenRAnalysis: () => post('/predictions/greenr-analyze', {}),
   getGreenRLatest: () => get('/predictions/greenr-latest'),
 
@@ -66,5 +66,5 @@ export const api = {
   getMessages: (jid) => get(`/chat/messages/${jid}`),
   sendMessage: (jid, content) => post(`/chat/messages/${jid}`, { content }),
 
-  chatbot: (text, language, history = []) => post('/chatbot/message', { text, language, history }),
+  chatbot: (text, history = []) => post('/chatbot/message', { text, language: 'en', history }),
 }

@@ -33,6 +33,7 @@ const NAV = {
   ],
   admin: [
     { path: 'overview', label: 'Overview', icon: BarChart3 },
+    { path: 'requests', label: 'Blood Requests', icon: ClipboardList },
     { path: 'map', label: 'Heatmap', icon: Map },
     { path: 'predictions', label: 'Predictions', icon: Brain },
     COMMUNITY_LINK,
@@ -67,7 +68,7 @@ export default function Layout({ role, activeTab, setTab, children, badge }) {
             <span className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center">
               <Droplets size={16} className="text-white" />
             </span>
-            <span className="font-bold text-gray-900">VitaTrace</span>
+            <span className="font-bold text-gray-900">LifeForge</span>
           </button>
         </div>
 

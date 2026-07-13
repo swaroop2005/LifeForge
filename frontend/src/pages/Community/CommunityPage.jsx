@@ -83,7 +83,7 @@ export default function CommunityPage() {
         <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
           <button onClick={() => nav('/')} className="flex items-center gap-2.5">
             <span className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center text-white text-sm font-bold">V</span>
-            <span className="font-bold text-gray-900">VitaTrace</span>
+            <span className="font-bold text-gray-900">LifeForge</span>
           </button>
           <div className="flex items-center gap-3">
             {token ? (

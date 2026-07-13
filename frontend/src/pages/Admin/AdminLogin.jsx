@@ -46,7 +46,7 @@ export default function AdminLogin() {
           <div className="text-center mb-8">
             <div className="w-14 h-14 bg-red-600 rounded-2xl flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">V</div>
             <h1 className="text-2xl font-bold text-gray-900">Admin Portal</h1>
-            <p className="text-gray-400 text-sm mt-1">VitaTrace — Restricted Access</p>
+            <p className="text-gray-400 text-sm mt-1">LifeForge — Restricted Access</p>
           </div>
 
           {error && (
@@ -73,7 +73,7 @@ export default function AdminLogin() {
           </form>
 
           <p className="text-center text-xs text-gray-400 mt-6">
-            <a href="/" className="hover:text-red-500 transition-colors">← Back to VitaTrace</a>
+            <a href="/" className="hover:text-red-500 transition-colors">← Back to LifeForge</a>
           </p>
         </div>
       </div>

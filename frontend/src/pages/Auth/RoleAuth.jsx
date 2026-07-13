@@ -200,7 +200,7 @@ export default function RoleAuth({ role }) {
           </form>
 
           <p className="text-center text-xs text-gray-400 mt-6">
-            <a href="/" className="hover:text-red-500 transition-colors">← Back to VitaTrace</a>
+            <a href="/" className="hover:text-red-500 transition-colors">← Back to LifeForge</a>
           </p>
         </div>
       </div>

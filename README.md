@@ -1,4 +1,4 @@
-# VitaTrace
+# LifeForge
 
 > **Every Drop Traced. Every Life Counted.**
 
@@ -21,8 +21,8 @@ AI-powered blood donation and blood disorder support platform connecting patient
 **Requirements:** Docker + Docker Compose installed.
 
 ```bash
-git clone https://github.com/swaroop2005/VitaTrace.git
-cd VitaTrace
+git clone https://github.com/swaroop2005/LifeForge.git
+cd LifeForge
 ```
 
 Create `backend/.env`:
@@ -157,7 +157,7 @@ Disease-aware AI with custom system prompt rules per condition:
 ## Project structure
 
 ```
-VitaTrace/
+LifeForge/
 ├── backend/
 │   ├── app/
 │   │   ├── routers/          # auth, patient, donor, hospital, admin, blood_banks, chatbot, predictions
@@ -167,7 +167,7 @@ VitaTrace/
 │   ├── data/
 │   │   ├── eraktkosh_stock.csv       # 47,216 rows — live blood bank stock
 │   │   ├── embeddings_cache.npz      # 64-chunk RAG embeddings
-│   │   └── knowledge_base.json       # NIH ODS + VitaTrace disease chunks
+│   │   └── knowledge_base.json       # NIH ODS + LifeForge disease chunks
 │   └── ml/
 │       └── model.pkl         # shortage risk + demand prediction model
 ├── frontend/
@@ -191,4 +191,4 @@ python scrape_eraktkosh.py --schedule  # every 6 hours via APScheduler
 
 ---
 
-Built with dedication by the VitaTrace team. **Every drop traced. Every life counted.**
+Built with dedication by the LifeForge team. **Every drop traced. Every life counted.**

@@ -6,11 +6,10 @@ from app.routers import auth, patient, donor, hospital, admin, blood_banks, comm
 from app.services.seed import seed_blood_banks
 from app.services.seed_users import seed_users
 from app.services.seed_synthetic import seed_synthetic
-from app.services.prediction import run_predictions
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="VitaTrace API", version="1.0.0")
+app = FastAPI(title="LifeForge API", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -62,7 +61,6 @@ def startup():
         seed_blood_banks(db)
         seed_users(db)
         seed_synthetic(db)
-        run_predictions(db)
     finally:
         db.close()
     try:
@@ -73,4 +71,4 @@ def startup():
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "service": "VitaTrace"}
+    return {"status": "ok", "service": "LifeForge"}

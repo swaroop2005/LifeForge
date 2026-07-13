@@ -88,6 +88,11 @@ def trace_blood(data: TraceBloodIn, db: Session = Depends(get_db),
     donation = db.query(Donation).filter(Donation.id == data.donation_id).first()
     if not donation:
         raise HTTPException(404, "Donation not found")
+    existing = db.query(BloodJourney).filter(
+        BloodJourney.donor_id == donation.donor_id,
+        BloodJourney.patient_id == data.patient_request_id).first()
+    if existing:
+        return {"journey_id": existing.id, "message": "Journey already exists for this donor and patient"}
     donation.patient_id = data.patient_request_id
     journey = BloodJourney(donation_id=donation.id, donor_id=donation.donor_id,
                            patient_id=data.patient_request_id)

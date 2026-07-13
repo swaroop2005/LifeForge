@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Depends
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 from collections import defaultdict
 from app.database import get_db
-from app.models import User, Donor, Patient, Hospital, BloodBank, BloodStock, BloodRequest, PredictionScore
+from app.models import User, Donor, Patient, Hospital, BloodBank, BloodStock, BloodRequest, Donation, BloodJourney, PredictionScore
 from app.deps import require_role
 from app.services.geo import STATE_CENTROIDS
 
@@ -11,6 +12,9 @@ router = APIRouter(prefix="/admin", tags=["admin"])
 @router.get("/dashboard")
 def dashboard(db: Session = Depends(get_db), _=Depends(require_role("admin"))):
     total_stock = db.query(BloodStock.units).all()
+    users_by_role = dict(
+        db.query(User.role, func.count(User.id)).group_by(User.role).all()
+    )
     return {
         "total_users": db.query(User).count(),
         "total_donors": db.query(Donor).count(),
@@ -20,6 +24,16 @@ def dashboard(db: Session = Depends(get_db), _=Depends(require_role("admin"))):
         "total_stock_units": sum(s[0] for s in total_stock),
         "pending_requests": db.query(BloodRequest).filter(BloodRequest.status == "pending").count(),
         "fulfilled_requests": db.query(BloodRequest).filter(BloodRequest.status == "fulfilled").count(),
+        "total_requests": db.query(BloodRequest).count(),
+        "total_donations": db.query(Donation).count(),
+        "active_journeys": db.query(BloodJourney).filter(BloodJourney.chat_accepted == True).count(),
+        "users_by_role": users_by_role,
+        "low_stock_alerts": [
+            {"bank_name": bank.name, "blood_type": s.blood_type, "units": s.units}
+            for s, bank in db.query(BloodStock, BloodBank)
+                .join(BloodBank, BloodStock.bank_id == BloodBank.id)
+                .filter(BloodStock.units < 10).limit(20).all()
+        ],
     }
 
 @router.get("/heatmap")
@@ -55,11 +69,30 @@ def heatmap(db: Session = Depends(get_db), _=Depends(require_role("admin"))):
         })
     return sorted(result, key=lambda x: x["shortage_risk"], reverse=True)
 
-@router.get("/predictions")
-def predictions(db: Session = Depends(get_db), _=Depends(require_role("admin"))):
-    rows = db.query(PredictionScore).order_by(PredictionScore.shortage_risk.desc()).limit(50).all()
-    return [{"region": r.region, "blood_type": r.blood_type,
-             "shortage_risk": r.shortage_risk, "predicted_demand": r.predicted_demand} for r in rows]
+@router.get("/requests")
+def list_requests(db: Session = Depends(get_db), _=Depends(require_role("admin"))):
+    rows = db.query(BloodRequest).order_by(BloodRequest.created_at.desc()).limit(200).all()
+    result = []
+    for r in rows:
+        requester_name = None
+        if r.requester_type == "patient":
+            p = db.query(Patient).filter(Patient.id == r.requester_id).first()
+            requester_name = p.name if p else None
+        elif r.requester_type == "hospital":
+            h = db.query(Hospital).filter(Hospital.id == r.requester_id).first()
+            requester_name = h.name if h else None
+        result.append({
+            "id": r.id,
+            "requester_name": requester_name or "Unknown",
+            "requester_type": r.requester_type,
+            "blood_type": r.blood_type,
+            "quantity": r.quantity,
+            "urgency": r.urgency,
+            "status": r.status,
+            "hospital_name": r.hospital_name,
+            "created_at": r.created_at,
+        })
+    return result
 
 @router.get("/users")
 def list_users(db: Session = Depends(get_db), _=Depends(require_role("admin"))):

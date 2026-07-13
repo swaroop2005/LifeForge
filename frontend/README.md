@@ -1,10 +1,10 @@
-# 🩸 VitaTrace Frontend
+# 🩸 LifeForge Frontend
 
 ## Overview
 
-VitaTrace is an AI-powered blood donation and healthcare management platform designed to bridge the gap between **patients, donors, hospitals, and administrators** through a unified digital ecosystem.
+LifeForge is an AI-powered blood donation and healthcare management platform designed to bridge the gap between **patients, donors, hospitals, and administrators** through a unified digital ecosystem.
 
-The frontend is built with **React** and **Vite**, delivering a fast, responsive, and intuitive user experience while seamlessly integrating with the VitaTrace backend APIs.
+The frontend is built with **React** and **Vite**, delivering a fast, responsive, and intuitive user experience while seamlessly integrating with the LifeForge backend APIs.
 
 ---
 
@@ -108,7 +108,7 @@ npm run preview
 
 ## 🔗 Backend Integration
 
-This frontend communicates with the VitaTrace backend for:
+This frontend communicates with the LifeForge backend for:
 
 * User authentication
 * Role-based dashboards
@@ -122,9 +122,9 @@ This frontend communicates with the VitaTrace backend for:
 
 ## 🎯 Vision
 
-VitaTrace aims to create a transparent, accessible, and efficient blood donation ecosystem where technology helps save lives by connecting the right people at the right time.
+LifeForge aims to create a transparent, accessible, and efficient blood donation ecosystem where technology helps save lives by connecting the right people at the right time.
 
-By combining modern web technologies with AI-assisted healthcare capabilities, VitaTrace seeks to improve coordination between patients, donors, hospitals, and administrators while promoting faster and more reliable blood donation workflows.
+By combining modern web technologies with AI-assisted healthcare capabilities, LifeForge seeks to improve coordination between patients, donors, hospitals, and administrators while promoting faster and more reliable blood donation workflows.
 
 ---
 

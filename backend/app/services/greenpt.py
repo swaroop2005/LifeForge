@@ -89,7 +89,7 @@ def retrieve_chunks(query: str, top_k: int = 20, disease_filter: str = None) -> 
             "disease": _kb_chunks[i].get("disease"),
             "topic": _kb_chunks[i].get("topic"),
             "nutrient": _kb_chunks[i].get("nutrient"),
-            "source": _kb_chunks[i].get("source", "VitaTrace"),
+            "source": _kb_chunks[i].get("source", "LifeForge"),
         }
         for i in top_idx
     ]
@@ -105,7 +105,7 @@ def rerank_chunks(query: str, chunks: list, top_k: int = 5) -> list:
             "disease": chunks[r.index].get("disease"),
             "topic": chunks[r.index].get("topic"),
             "nutrient": chunks[r.index].get("nutrient"),
-            "source": chunks[r.index].get("source", "VitaTrace"),
+            "source": chunks[r.index].get("source", "LifeForge"),
         }
         for r in resp.results
     ]

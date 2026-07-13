@@ -15,7 +15,6 @@ export default function ChatbotWidget() {
   const [open, setOpen] = useState(false)
   const [msgs, setMsgs] = useState([])
   const [input, setInput] = useState('')
-  const [lang, setLang] = useState('en')
   const [loading, setLoading] = useState(false)
   const bottomRef = useRef(null)
 
@@ -39,7 +38,7 @@ export default function ChatbotWidget() {
     }))
 
     try {
-      const res = await api.chatbot(msg, lang, history)
+      const res = await api.chatbot(msg, history)
       const botText = res.response || 'Sorry, I could not generate a response. Please try again.'
       setMsgs(m => [...m, { role: 'bot', text: botText }])
     } catch {
@@ -59,22 +58,16 @@ export default function ChatbotWidget() {
           {/* Header */}
           <div className="bg-gradient-to-r from-red-600 to-rose-500 text-white px-4 py-3 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center text-sm font-bold">V</div>
+              <div className="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center text-sm font-bold">L</div>
               <div>
-                <p className="font-bold text-sm">VitaTrace Assistant</p>
+                <p className="font-bold text-sm">LifeForge Assistant</p>
                 <div className="flex items-center gap-1 mt-0.5">
                   <span className="w-1.5 h-1.5 bg-green-400 rounded-full"></span>
-                  <p className="text-xs text-red-100">GreenPT · Sustainable AI</p>
+                  <p className="text-xs text-red-100">AI Health Companion</p>
                 </div>
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <select value={lang} onChange={e => setLang(e.target.value)}
-                className="text-xs bg-white/20 text-white rounded-lg px-2 py-1 border border-white/30 cursor-pointer outline-none">
-                <option value="en">EN</option>
-                <option value="hi">हिं</option>
-                <option value="te">తె</option>
-              </select>
               {msgs.length > 0 && (
                 <button onClick={clear} className="text-red-200 hover:text-white transition-colors" title="Clear chat">
                   <RotateCcw size={14} />
@@ -108,7 +101,7 @@ export default function ChatbotWidget() {
             {msgs.map((m, i) => (
               <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 {m.role === 'bot' && (
-                  <div className="w-7 h-7 bg-red-100 rounded-xl flex items-center justify-center text-xs font-bold text-red-600 mr-2 mt-1 shrink-0">V</div>
+                  <div className="w-7 h-7 bg-red-100 rounded-xl flex items-center justify-center text-xs font-bold text-red-600 mr-2 mt-1 shrink-0">L</div>
                 )}
                 <div className={`max-w-[80%] px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed
                   ${m.role === 'user'
@@ -152,7 +145,7 @@ export default function ChatbotWidget() {
             <div className="flex gap-2 items-end">
               <input value={input} onChange={e => setInput(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && !e.shiftKey && send()}
-                placeholder={lang === 'hi' ? 'अपना प्रश्न पूछें...' : lang === 'te' ? 'మీ ప్రశ్న అడగండి...' : 'Ask anything...'}
+                placeholder="Ask anything..."
                 className="flex-1 text-sm bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 outline-none focus:border-red-400 focus:bg-white transition-colors resize-none" />
               <button onClick={() => send()} disabled={loading || !input.trim()}
                 className="bg-red-600 text-white w-10 h-10 rounded-xl flex items-center justify-center hover:bg-red-700 disabled:opacity-40 transition-colors shrink-0">

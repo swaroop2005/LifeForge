@@ -47,7 +47,7 @@ export default function LeaderboardPage() {
           <button onClick={() => nav('/')}
             className="flex items-center gap-2 text-gray-500 hover:text-red-600 transition-colors text-sm font-medium">
             <Droplets size={16} className="text-red-600" />
-            VitaTrace
+            LifeForge
           </button>
           <span className="text-xs text-gray-400 font-medium uppercase tracking-widest">Hall of Heroes</span>
           <a href="/login/donor"

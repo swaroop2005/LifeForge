@@ -4,7 +4,7 @@ from typing import List, Optional
 from datetime import datetime
 from pydantic import BaseModel
 from app.database import get_db
-from app.models import Patient, BloodRequest, BloodJourney
+from app.models import Patient, BloodRequest, BloodJourney, Donor, Donation
 from app.deps import require_role
 
 router = APIRouter(prefix="/patient", tags=["patient"])
@@ -78,16 +78,30 @@ def list_requests(db: Session = Depends(get_db), user=Depends(require_role("pati
     patient = db.query(Patient).filter(Patient.user_id == user.id).first()
     return db.query(BloodRequest).filter(BloodRequest.requester_id == patient.id).all()
 
+def _journey_detail(j: BloodJourney, db: Session):
+    donor = db.query(Donor).filter(Donor.id == j.donor_id).first()
+    donation = db.query(Donation).filter(Donation.id == j.donation_id).first()
+    return {
+        "id": j.id,
+        "notified_at": j.notified_at,
+        "chat_accepted": j.chat_accepted,
+        "donor_name": donor.name if donor else "Anonymous donor",
+        "donor_blood_type": donor.blood_type if donor else None,
+        "donor_badge": donor.badge if donor else None,
+        "quantity": donation.quantity if donation else 1,
+    }
+
 @router.get("/journey/{journey_id}")
 def get_journey(journey_id: str, db: Session = Depends(get_db),
                 user=Depends(require_role("patient"))):
     j = db.query(BloodJourney).filter(BloodJourney.id == journey_id).first()
     if not j:
         raise HTTPException(404, "Journey not found")
-    return {"id": j.id, "notified_at": j.notified_at, "chat_accepted": j.chat_accepted}
+    return _journey_detail(j, db)
 
 @router.get("/journeys")
 def list_journeys(db: Session = Depends(get_db), user=Depends(require_role("patient"))):
     patient = db.query(Patient).filter(Patient.user_id == user.id).first()
-    journeys = db.query(BloodJourney).filter(BloodJourney.patient_id == patient.id).all()
-    return [{"id": j.id, "notified_at": j.notified_at, "chat_accepted": j.chat_accepted} for j in journeys]
+    journeys = db.query(BloodJourney).filter(BloodJourney.patient_id == patient.id)\
+        .order_by(BloodJourney.notified_at.desc()).all()
+    return [_journey_detail(j, db) for j in journeys]

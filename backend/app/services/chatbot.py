@@ -59,7 +59,7 @@ MCP_TOOLS = [
 ]
 
 SYSTEM_PROMPT = {
-    "en": """You are VitaTrace Assistant — a warm, knowledgeable health companion for people dealing with blood disorders. You help patients, donors, and caregivers.
+    "en": """You are LifeForge Assistant — a warm, knowledgeable health companion for people dealing with blood disorders. You help patients, donors, and caregivers.
 
 You are an expert in:
 - **Thalassemia** (major & minor): transfusion schedules, chelation therapy, diet, fatigue management, genetic counseling
@@ -80,7 +80,7 @@ Your personality:
 
 If asked about something outside blood disorders or general health, politely say you specialise in blood disorder support.""",
 
-    "hi": """आप VitaTrace सहायक हैं — रक्त विकारों से जूझ रहे लोगों के लिए एक गर्मजोशी से भरे, जानकार स्वास्थ्य साथी। आप मरीजों, दाताओं और देखभाल करने वालों की मदद करते हैं।
+    "hi": """आप LifeForge सहायक हैं — रक्त विकारों से जूझ रहे लोगों के लिए एक गर्मजोशी से भरे, जानकार स्वास्थ्य साथी। आप मरीजों, दाताओं और देखभाल करने वालों की मदद करते हैं।
 
 आप इन विषयों के विशेषज्ञ हैं:
 - थैलेसीमिया: रक्त आधान, आहार, थकान प्रबंधन
@@ -94,7 +94,7 @@ If asked about something outside blood disorders or general health, politely say
 
     "te": """IMPORTANT INSTRUCTION: You MUST respond ONLY in Telugu language. Do NOT use Japanese, Chinese, or any other language. Only Telugu script.
 
-మీరు VitaTrace సహాయకుడు — రక్త రుగ్మతలతో పోరాడుతున్న వ్యక్తులకు స్నేహపూర్వకంగా సహాయపడే ఆరోగ్య సహచరుడు. మీరు రోగులకు, దాతలకు మరియు సంరక్షకులకు సహాయపడతారు.
+మీరు LifeForge సహాయకుడు — రక్త రుగ్మతలతో పోరాడుతున్న వ్యక్తులకు స్నేహపూర్వకంగా సహాయపడే ఆరోగ్య సహచరుడు. మీరు రోగులకు, దాతలకు మరియు సంరక్షకులకు సహాయపడతారు.
 
 మీకు ఈ విషయాలలో నైపుణ్యం ఉంది:
 - థలసేమియా: రక్త మార్పిడి, ఆహారం, అలసట నిర్వహణ, జన్యు సలహా
@@ -247,7 +247,7 @@ def chat(message: str, language: str, user_id, db: Session,
         # build context with source attribution
         context_parts = []
         for c in top_chunks:
-            src = c.get("source", "VitaTrace")
+            src = c.get("source", "LifeForge")
             nutrient = c.get("nutrient")
             label = f"[{src}" + (f" — {nutrient}" if nutrient else "") + "]"
             context_parts.append(f"{label}\n{c['text']}")
@@ -270,7 +270,7 @@ def chat(message: str, language: str, user_id, db: Session,
         sys_content += f"\n\n--- CURRENT USER CONTEXT ---\nThe logged-in user is a donor. Their donor_id is: {donor_id}\nWhen calling check_donor_eligibility or get_donor_impact, use this donor_id automatically — do NOT ask the user for it."
 
     if context:
-        sys_content += f"\n\n--- Verified knowledge from NIH ODS and VitaTrace (cite source when relevant) ---\n{context}"
+        sys_content += f"\n\n--- Verified knowledge from NIH ODS and LifeForge (cite source when relevant) ---\n{context}"
 
     # green-l-raw supports custom system prompts
     messages = [{"role": "system", "content": sys_content}]

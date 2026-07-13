@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import { Droplets, Heart, Syringe, Gift, ClipboardList, Route, Bell, Clock, CheckCircle, AlertTriangle, Trophy } from 'lucide-react'
+import { Droplets, Heart, Syringe, Gift, ClipboardList, Route, Bell, Clock, CheckCircle, AlertTriangle, Trophy, MessageCircle, Send } from 'lucide-react'
 import Layout from '../../components/Layout'
 import BloodTypeTag from '../../components/BloodTypeTag'
 import { api } from '../../services/api'
@@ -122,10 +122,14 @@ export default function DonorDashboard() {
   const [showBankDrop, setShowBankDrop] = useState(false)
   const [loading, setLoading] = useState(false)
   const [msg, setMsg] = useState('')
+  const [chatJourney, setChatJourney] = useState(null)
+  const [chatMsgs, setChatMsgs] = useState([])
+  const [chatInput, setChatInput] = useState('')
   const quote = useMemo(() => IMPACT_QUOTES[Math.floor(Math.random() * IMPACT_QUOTES.length)], [])
 
   useEffect(() => {
-    api.getDonorProfile().then(d => { setProfile(d); if (d.pending_journeys) setJourneys(d.pending_journeys) })
+    api.getDonorProfile().then(setProfile)
+    api.getDonorJourneys().then(j => setJourneys(Array.isArray(j) ? j : []))
     api.getDonorImpact().then(setImpact)
     api.getDonorHistory().then(h => setHistory(Array.isArray(h) ? h : []))
     api.getLeaderboard().then(l => setLeaderboard(Array.isArray(l) ? l : []))
@@ -158,7 +162,7 @@ export default function DonorDashboard() {
       })
       if (res.donation_id) {
         setMsg(`Donation recorded! +${res.points_earned || 0} points earned.`)
-        api.getDonorProfile().then(d => { setProfile(d); if (d.pending_journeys) setJourneys(d.pending_journeys) })
+        api.getDonorProfile().then(setProfile)
         api.getDonorHistory().then(h => setHistory(Array.isArray(h) ? h : []))
         api.getLeaderboard().then(l => setLeaderboard(Array.isArray(l) ? l : []))
       } else setMsg(errMsg(res.detail))
@@ -168,8 +172,23 @@ export default function DonorDashboard() {
 
   const respondJourney = async (id, action) => {
     const res = action === 'accept' ? await api.acceptJourney(id) : await api.declineJourney(id)
-    setMsg(res.message || 'Done')
-    api.getDonorProfile().then(d => { setProfile(d); if (d.pending_journeys) setJourneys(d.pending_journeys) })
+    setMsg(action === 'accept' ? 'Journey accepted! +25 points. You can now chat with the patient.' : res.message || 'Done')
+    api.getDonorProfile().then(setProfile)
+    api.getDonorJourneys().then(j => setJourneys(Array.isArray(j) ? j : []))
+  }
+
+  const openChat = async (j) => {
+    setChatJourney(j)
+    const m = await api.getMessages(j.id)
+    setChatMsgs(Array.isArray(m) ? m : [])
+  }
+
+  const sendChat = async () => {
+    const text = chatInput.trim()
+    if (!text || !chatJourney) return
+    setChatInput('')
+    const res = await api.sendMessage(chatJourney.id, text)
+    if (res.id) setChatMsgs(m => [...m, res])
   }
 
   const inputCls = "w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 outline-none focus:border-red-400 focus:bg-white transition-colors"
@@ -178,7 +197,7 @@ export default function DonorDashboard() {
   const badgeStyle = BADGE_STYLES[badge] || null
 
   return (
-    <Layout role="donor" activeTab={tab} setTab={t => { setTab(t); setMsg('') }} badge={journeys.length}>
+    <Layout role="donor" activeTab={tab} setTab={t => { setTab(t); setMsg('') }} badge={journeys.filter(j => !j.chat_accepted).length}>
 
       {msg && <div className="bg-green-50 border border-green-200 text-green-700 text-sm px-5 py-3 rounded-xl mb-5">{msg}</div>}
 
@@ -419,52 +438,116 @@ export default function DonorDashboard() {
 
       {/* ── JOURNEY REQUESTS ── */}
       {tab === 'journeys' && (
-        <div className="max-w-2xl">
-          <h2 className="text-lg font-bold text-gray-900 mb-5">Journey Requests</h2>
-          {journeys.length === 0 && (
-            <div className="bg-white rounded-2xl border border-dashed border-gray-200 p-12 text-center">
-              <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center mx-auto mb-3">
-                <Bell size={24} className="text-gray-300" />
+        <div className="max-w-2xl space-y-8">
+          {/* Pending */}
+          <div>
+            <h2 className="text-lg font-bold text-gray-900 mb-5">Journey Requests</h2>
+            {journeys.filter(j => !j.chat_accepted).length === 0 && (
+              <div className="bg-white rounded-2xl border border-dashed border-gray-200 p-12 text-center">
+                <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                  <Bell size={24} className="text-gray-300" />
+                </div>
+                <p className="text-gray-400 text-sm">No pending journey requests right now.</p>
               </div>
-              <p className="text-gray-400 text-sm">No pending journey requests right now.</p>
+            )}
+            <div className="space-y-4">
+              {journeys.filter(j => !j.chat_accepted).map(j => (
+                <div key={j.id} className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center">
+                        <Route size={18} className="text-red-500" />
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <BloodTypeTag type={j.patient_blood_type} />
+                          <span className="text-sm font-semibold text-gray-800">{j.quantity} unit{j.quantity > 1 ? 's' : ''}</span>
+                        </div>
+                        <p className="text-xs text-gray-400">
+                          Patient: {j.patient_name || 'Anonymous'}{j.patient_city ? ` · ${j.patient_city}` : ''}
+                        </p>
+                      </div>
+                    </div>
+                    <span className="text-xs bg-orange-100 text-orange-600 font-semibold px-2.5 py-1 rounded-lg">Pending</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button onClick={() => respondJourney(j.id, 'accept')}
+                      className="bg-green-600 text-white py-3 rounded-xl text-sm font-bold hover:bg-green-700 transition-colors">
+                      Accept +25 pts
+                    </button>
+                    <button onClick={() => respondJourney(j.id, 'decline')}
+                      className="bg-gray-100 text-gray-500 py-3 rounded-xl text-sm font-semibold hover:bg-gray-200 transition-colors">
+                      Decline
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Accepted — chat */}
+          {journeys.filter(j => j.chat_accepted).length > 0 && (
+            <div>
+              <h2 className="text-lg font-bold text-gray-900 mb-5">Connected Patients</h2>
+              <div className="space-y-4">
+                {journeys.filter(j => j.chat_accepted).map(j => (
+                  <div key={j.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                    <div className="p-5 flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center">
+                          <Heart size={18} className="text-green-600" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-gray-800">{j.patient_name || 'Anonymous'}</p>
+                          <p className="text-xs text-gray-400">
+                            {j.patient_blood_type} · {j.quantity} unit{j.quantity > 1 ? 's' : ''}{j.patient_disease ? ` · ${j.patient_disease.replace('_', ' ')}` : ''}
+                          </p>
+                        </div>
+                      </div>
+                      <button onClick={() => chatJourney?.id === j.id ? setChatJourney(null) : openChat(j)}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-colors ${
+                          chatJourney?.id === j.id ? 'bg-gray-100 text-gray-600' : 'bg-red-600 text-white hover:bg-red-700'
+                        }`}>
+                        <MessageCircle size={15} />
+                        {chatJourney?.id === j.id ? 'Close' : 'Chat'}
+                      </button>
+                    </div>
+
+                    {chatJourney?.id === j.id && (
+                      <div className="border-t border-gray-100">
+                        <div className="h-64 overflow-y-auto p-4 space-y-2 bg-gray-50">
+                          {chatMsgs.length === 0 && (
+                            <p className="text-xs text-gray-400 text-center mt-8">No messages yet. Say hello!</p>
+                          )}
+                          {chatMsgs.map(m => (
+                            <div key={m.id} className={`flex ${m.sender_id === profile?.user_id ? 'justify-end' : 'justify-start'}`}>
+                              <div className={`max-w-[75%] px-3.5 py-2 rounded-2xl text-sm ${
+                                m.sender_id === profile?.user_id
+                                  ? 'bg-red-600 text-white rounded-br-sm'
+                                  : 'bg-white border border-gray-100 text-gray-700 rounded-bl-sm'
+                              }`}>
+                                {m.content}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                        <div className="p-3 bg-white flex gap-2">
+                          <input value={chatInput} onChange={e => setChatInput(e.target.value)}
+                            onKeyDown={e => e.key === 'Enter' && sendChat()}
+                            placeholder="Type a message..."
+                            className="flex-1 text-sm bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 outline-none focus:border-red-400 focus:bg-white transition-colors" />
+                          <button onClick={sendChat} disabled={!chatInput.trim()}
+                            className="bg-red-600 text-white w-10 h-10 rounded-xl flex items-center justify-center hover:bg-red-700 disabled:opacity-40 transition-colors">
+                            <Send size={15} />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           )}
-          <div className="space-y-4">
-            {journeys.map(j => (
-              <div key={j.id} className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center">
-                      <Route size={18} className="text-red-500" />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <BloodTypeTag type={j.blood_type} />
-                        <span className="text-sm font-semibold text-gray-800">{j.units} units</span>
-                      </div>
-                      <p className="text-xs text-gray-400">Patient: {j.patient_name || 'Anonymous'}</p>
-                    </div>
-                  </div>
-                  <span className="text-xs bg-orange-100 text-orange-600 font-semibold px-2.5 py-1 rounded-lg">Pending</span>
-                </div>
-                {j.message && (
-                  <div className="bg-gray-50 rounded-xl px-4 py-3 mb-4 text-sm text-gray-600 italic border-l-2 border-red-300">
-                    "{j.message}"
-                  </div>
-                )}
-                <div className="grid grid-cols-2 gap-3">
-                  <button onClick={() => respondJourney(j.id, 'accept')}
-                    className="bg-green-600 text-white py-3 rounded-xl text-sm font-bold hover:bg-green-700 transition-colors">
-                    Accept +25 pts
-                  </button>
-                  <button onClick={() => respondJourney(j.id, 'decline')}
-                    className="bg-gray-100 text-gray-500 py-3 rounded-xl text-sm font-semibold hover:bg-gray-200 transition-colors">
-                    Decline
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
       )}
     </Layout>

@@ -111,7 +111,7 @@ Return this structure (max 4 critical_alerts, max 3 regional_analysis, max 4 imm
   "demand_forecast": "1-2 sentence forecast"
 }"""
 
-    user_message = f"""Analyze this real-time blood supply data from VitaTrace platform:
+    user_message = f"""Analyze this real-time blood supply data from LifeForge platform:
 
 {stock_summary}
 

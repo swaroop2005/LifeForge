@@ -31,8 +31,7 @@ export default function AdminDashboard() {
   const [tab, setTab] = useState('overview')
   const [dashboard, setDashboard] = useState(null)
   const [heatmap, setHeatmap] = useState([])
-  const [predictions, setPredictions] = useState([])
-  const [runMsg, setRunMsg] = useState('')
+  const [requests, setRequests] = useState([])
   const [greenrAnalysis, setGreenrAnalysis] = useState(null)
   const [greenrLoading, setGreenrLoading] = useState(false)
   const [greenrMsg, setGreenrMsg] = useState('')
@@ -40,16 +39,9 @@ export default function AdminDashboard() {
   useEffect(() => {
     api.getAdminDashboard().then(setDashboard)
     api.getHeatmap().then(h => setHeatmap(Array.isArray(h) ? h : []))
-    api.getPredictions().then(p => setPredictions(Array.isArray(p) ? p : []))
+    api.getAdminRequests().then(r => setRequests(Array.isArray(r) ? r : []))
     api.getGreenRLatest().then(d => { if (d && d.summary) setGreenrAnalysis(d) })
   }, [])
-
-  const runPredictions = async () => {
-    setRunMsg('Running ML model...')
-    const res = await api.runPredictions()
-    setRunMsg(res.message || 'Predictions updated.')
-    api.getPredictions().then(p => setPredictions(Array.isArray(p) ? p : []))
-  }
 
   const runGreenR = async () => {
     setGreenrLoading(true)
@@ -138,7 +130,7 @@ export default function AdminDashboard() {
           <div className="flex items-center justify-between mb-5">
             <div>
               <h2 className="text-lg font-bold text-gray-900">Blood Bank Shortage Heatmap</h2>
-              <p className="text-xs text-gray-400 mt-1">{heatmap.length} banks · Powered by GreenPT ML predictions</p>
+              <p className="text-xs text-gray-400 mt-1">{heatmap.length} states · Powered by LifeForge AI</p>
             </div>
             <div className="flex items-center gap-4 text-xs">
               {[['bg-green-500', 'Low Risk'], ['bg-orange-400', 'Medium'], ['bg-red-500', 'Critical']].map(([c, l]) => (
@@ -340,58 +332,54 @@ export default function AdminDashboard() {
             )}
           </div>
 
-          {/* ML Predictions */}
-          <div>
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <h2 className="text-lg font-bold text-gray-900">ML Shortage Scores</h2>
-                  <span className="text-xs font-bold bg-blue-100 text-blue-700 px-2.5 py-1 rounded-lg">RandomForest</span>
-                </div>
-                <p className="text-xs text-gray-400">Numeric risk scores per region per blood type</p>
-              </div>
-              <div className="flex items-center gap-3">
-                {runMsg && <p className="text-xs text-blue-600 font-medium">{runMsg}</p>}
-                <button onClick={runPredictions}
-                  className="bg-blue-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-blue-700 transition-colors">
-                  Run ML Model
-                </button>
-              </div>
-            </div>
+        </div>
+      )}
 
+      {/* ── BLOOD REQUESTS ── */}
+      {tab === 'requests' && (
+        <div>
+          <div className="mb-5">
+            <h2 className="text-lg font-bold text-gray-900">Blood Requests</h2>
+            <p className="text-xs text-gray-400 mt-1">{requests.length} requests across the platform</p>
+          </div>
+          {requests.length === 0 ? (
+            <div className="bg-white rounded-2xl border border-gray-100 p-10 text-center shadow-sm">
+              <p className="text-sm text-gray-400">No blood requests yet</p>
+            </div>
+          ) : (
             <div className="space-y-2">
-              {predictions.slice(0, 40).map((p, i) => (
-                <div key={i} className="bg-white rounded-2xl border border-gray-100 p-4 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
+              {requests.map(r => (
+                <div key={r.id} className="bg-white rounded-2xl border border-gray-100 p-4 flex items-center justify-between shadow-sm hover:shadow-md transition-shadow">
                   <div className="flex items-center gap-4">
-                    <BloodTypeTag type={p.blood_type} />
+                    <BloodTypeTag type={r.blood_type} />
                     <div>
-                      <p className="text-sm font-semibold text-gray-800">{p.bank_name || p.region}</p>
-                      <p className="text-xs text-gray-400">{p.city}, {p.state}</p>
+                      <p className="text-sm font-semibold text-gray-800">{r.requester_name}</p>
+                      <p className="text-xs text-gray-400 capitalize">
+                        {r.requester_type}{r.hospital_name ? ` · ${r.hospital_name}` : ''} · {r.quantity} unit{r.quantity > 1 ? 's' : ''}
+                      </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-4">
-                    <div className="text-right hidden sm:block">
-                      <p className="text-xs text-gray-400">Predicted Demand</p>
-                      <p className="text-sm font-bold text-gray-700">{p.predicted_demand?.toFixed(0)} units</p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-24 h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                        <div className="h-full rounded-full transition-all"
-                          style={{ width: `${(p.shortage_risk || 0) * 100}%`, background: riskColor(p.shortage_risk || 0) }} />
-                      </div>
-                      <span className="text-sm font-black w-10 text-right" style={{ color: riskColor(p.shortage_risk || 0) }}>
-                        {((p.shortage_risk || 0) * 100).toFixed(0)}%
-                      </span>
-                    </div>
+                  <div className="flex items-center gap-3">
+                    <span className={`text-xs font-bold px-2.5 py-1 rounded-lg capitalize ${
+                      r.urgency === 'critical' ? 'bg-red-100 text-red-700' :
+                      r.urgency === 'urgent' ? 'bg-orange-100 text-orange-700' :
+                      'bg-gray-100 text-gray-600'
+                    }`}>{r.urgency}</span>
+                    <span className={`text-xs font-bold px-2.5 py-1 rounded-lg capitalize ${
+                      r.status === 'fulfilled' ? 'bg-green-100 text-green-700' :
+                      r.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
+                      'bg-gray-100 text-gray-600'
+                    }`}>{r.status}</span>
+                    <span className="text-xs text-gray-400 hidden sm:block">
+                      {r.created_at ? new Date(r.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : ''}
+                    </span>
                   </div>
                 </div>
               ))}
             </div>
-          </div>
+          )}
         </div>
       )}
-
-      {/* ── USERS ── */}
     </Layout>
   )
 }

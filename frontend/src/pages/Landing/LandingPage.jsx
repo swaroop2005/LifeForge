@@ -67,7 +67,7 @@ export default function LandingPage() {
             <span className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center">
               <Droplets size={16} className="text-white" />
             </span>
-            <span className="font-bold text-gray-900 text-lg">VitaTrace</span>
+            <span className="font-bold text-gray-900 text-lg">LifeForge</span>
           </a>
           <div className="hidden md:flex items-center gap-8 text-sm text-gray-500">
             <a href="#features" className="hover:text-red-600 transition-colors">Features</a>
@@ -104,7 +104,7 @@ export default function LandingPage() {
               <span className="text-red-200">Counted.</span>
             </h1>
             <p className="text-red-100 text-lg leading-relaxed mb-8 max-w-md">
-              VitaTrace connects patients, donors, and hospitals across thalassemia, sickle cell, hemophilia, anemia and more — powered by sustainable GreenPT AI.
+              LifeForge connects patients, donors, and hospitals across thalassemia, sickle cell, hemophilia, anemia and more — powered by sustainable GreenPT AI.
             </p>
 
             {/* Stats */}
@@ -188,7 +188,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <span className="text-red-600 text-sm font-semibold uppercase tracking-widest">Process</span>
-            <h2 className="text-4xl font-bold text-gray-900 mt-3 mb-4">How VitaTrace works</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mt-3 mb-4">How LifeForge works</h2>
           </div>
           <div className="grid md:grid-cols-4 gap-8">
             {HOW_IT_WORKS.map((h, i) => (
@@ -217,7 +217,7 @@ export default function LandingPage() {
               <span className="text-red-600 text-sm font-semibold uppercase tracking-widest">Coverage</span>
               <h2 className="text-4xl font-bold text-gray-900 mt-3 mb-4">Built for every blood disorder</h2>
               <p className="text-gray-500 text-lg leading-relaxed mb-8">
-                VitaTrace is disease-agnostic. Any NGO, hospital, or patient network working on blood disorders can use the platform.
+                LifeForge is disease-agnostic. Any NGO, hospital, or patient network working on blood disorders can use the platform.
               </p>
               <div className="flex flex-wrap gap-3">
                 {DISEASES_LIST.map(d => (
@@ -268,7 +268,7 @@ export default function LandingPage() {
                 <Droplets size={16} className="text-white" />
               </span>
               <div>
-                <p className="text-white font-bold">VitaTrace</p>
+                <p className="text-white font-bold">LifeForge</p>
                 <p className="text-xs">Universal Blood Disorder Support Platform</p>
               </div>
             </div>
@@ -277,7 +277,7 @@ export default function LandingPage() {
               <span className="text-green-400 font-semibold">GreenPT</span>
               <span>· STEMINATE HACKS 2026</span>
             </div>
-            <p className="text-xs">© 2026 VitaTrace · Built for impact</p>
+            <p className="text-xs">© 2026 LifeForge · Built for impact</p>
           </div>
         </div>
       </footer>
