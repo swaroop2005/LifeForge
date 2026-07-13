@@ -1,0 +1,23 @@
+from datetime import datetime, timedelta
+from jose import jwt, JWTError
+import bcrypt
+from app.config import settings
+
+def hash_password(password: str) -> str:
+    return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+
+def verify_password(plain: str, hashed: str) -> bool:
+    return bcrypt.checkpw(plain.encode(), hashed.encode())
+
+def create_token(user_id: str, role: str) -> str:
+    expire = datetime.utcnow() + timedelta(minutes=settings.jwt_expire_minutes)
+    return jwt.encode(
+        {"sub": user_id, "role": role, "exp": expire},
+        settings.jwt_secret, algorithm="HS256"
+    )
+
+def decode_token(token: str) -> dict:
+    try:
+        return jwt.decode(token, settings.jwt_secret, algorithms=["HS256"])
+    except JWTError:
+        return {}
